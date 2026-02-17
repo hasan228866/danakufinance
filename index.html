@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Danaku Finance - Testimoni Semarang</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Ably Realtime -->
+    <script src="https://cdn.ably.io/lib/ably.min-1.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary: #004d99;
+            --primary-dark: #003366;
+            --primary-light: #0066cc;
+            --secondary: #00a651;
+            --accent: #ff8c00;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --light-gray: #f8fafc;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --danger: #dc2626;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--dark);
+            line-height: 1.5;
+            padding-bottom: 80px;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 12px 20px 8px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .status-time {
+            font-weight: 700;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* App Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 0 20px 20px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-top h1 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .header-top h1 span {
+            color: var(--secondary);
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .header-icons i {
+            font-size: 22px;
+        }
+
+        .profile-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .profile-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .profile-info p {
+            font-size: 14px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .profile-badge {
+            background: var(--secondary);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Balance Card */
+        .balance-card {
+            background: var(--white);
+            margin: 20px;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+
+        .balance-label {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .balance-amount small {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--gray);
+        }
+
+        .balance-features {
+            display: flex;
+            gap: 20px;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .balance-feature {
+            flex: 1;
+            text-align: center;
+        }
+
+        .balance-feature i {
+            font-size: 24px;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+
+        .balance-feature span {
+            display: block;
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            margin: 20px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-title h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .section-title a {
+            color: var(--primary);
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .action-item {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 16px 8px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .action-item:active {
+            transform: scale(0.95);
+            background: var(--light-gray);
+        }
+
+        .action-item i {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .action-item span {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        /* Products Slider */
+        .products-section {
+            margin: 20px;
+        }
+
+        .products-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 4px 0 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .products-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .product-card-mobile {
+            min-width: 260px;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--secondary);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .product-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .product-icon i {
+            font-size: 28px;
+            color: var(--white);
+        }
+
+        .product-card-mobile h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .product-amount {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .product-desc {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        .btn-product-mobile {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-product-mobile:active {
+            background: var(--primary-dark);
+        }
+
+        /* Jaminan Card */
+        .jaminan-card-mobile {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            margin: 20px;
+            border-radius: 24px;
+            padding: 24px;
+            color: var(--white);
+        }
+
+        .jaminan-header-mobile {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .jaminan-header-mobile h3 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .jaminan-percent {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .jaminan-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .jaminan-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .jaminan-item:last-child {
+            border-bottom: none;
+        }
+
+        .jaminan-item-left h4 {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .jaminan-item-left p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .jaminan-value {
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        /* Fitur Unggulan */
+        .features-grid-mobile {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px;
+        }
+
+        .feature-card-mobile {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .feature-card-mobile i {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .feature-card-mobile h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .feature-card-mobile p {
+            font-size: 11px;
+            color: var(--gray);
+        }
+
+        /* Form Pengajuan */
+        .form-card {
+            background: var(--white);
+            margin: 20px;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .form-card p {
+            color: var(--gray);
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .mobile-form-group {
+            margin-bottom: 16px;
+        }
+
+        .mobile-form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 13px;
+            color: var(--dark);
+        }
+
+        .mobile-form-group input,
+        .mobile-form-group select,
+        .mobile-form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            background: var(--light-gray);
+            transition: all 0.3s;
+        }
+
+        .mobile-form-group input:focus,
+        .mobile-form-group select:focus,
+        .mobile-form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            background: var(--white);
+        }
+
+        /* Input jumlah pinjaman dengan max 1jt */
+        .input-rupiah {
+            position: relative;
+        }
+
+        .input-rupiah::before {
+            content: 'Rp';
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .input-rupiah input {
+            padding-left: 45px !important;
+        }
+
+        .limit-info {
+            font-size: 11px;
+            color: var(--gray);
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .btn-mobile-primary {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            border: none;
+            padding: 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(0,77,153,0.3);
+        }
+
+        .btn-mobile-primary:active {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(0,77,153,0.4);
+        }
+
+        .btn-mobile-wa {
+            width: 100%;
+            background: #25D366;
+            color: var(--white);
+            border: none;
+            padding: 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-mobile-wa:active {
+            background: #128C7E;
+        }
+
+        /* Form Testimoni */
+        .testimoni-form {
+            background: var(--white);
+            margin: 20px;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--secondary);
+        }
+
+        .testimoni-form h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rating-input {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .rating-input input {
+            display: none;
+        }
+
+        .rating-input label {
+            font-size: 30px;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .rating-input label:hover,
+        .rating-input label:hover ~ label,
+        .rating-input input:checked ~ label {
+            color: #FFD700;
+        }
+
+        /* Testimonials Live */
+        .testimonials-live {
+            margin: 20px;
+        }
+
+        .testimonial-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-counter {
+            background: var(--primary);
+            color: var(--white);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-refresh {
+            background: var(--light-gray);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-refresh:active {
+            transform: rotate(180deg);
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .testimonials-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .testimonial-item {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.3s ease;
+            position: relative;
+            border-left: 5px solid var(--secondary);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .testimonial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .testimonial-name {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .testimonial-rating {
+            color: #FFD700;
+        }
+
+        .testimonial-rating i {
+            font-size: 12px;
+        }
+
+        .testimonial-text {
+            font-size: 14px;
+            color: var(--dark);
+            margin-bottom: 10px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .testimonial-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--gray);
+        }
+
+        .testimonial-location {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .testimonial-time {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Delete button for own testimonials */
+        .testimonial-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-delete-testi {
+            background: var(--danger);
+            color: var(--white);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-delete-testi:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-delete-testi:active {
+            transform: scale(0.9);
+        }
+
+        /* Session ID input */
+        .session-info {
+            background: var(--light-gray);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-size: 12px;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .session-info i {
+            color: var(--primary);
+        }
+
+        /* Skeleton loading */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 20px;
+            height: 120px;
+            margin-bottom: 15px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Location Card */
+        .location-card {
+            background: var(--white);
+            margin: 20px;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .location-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .location-header i {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .location-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .location-detail {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .location-detail i {
+            color: var(--secondary);
+            font-size: 20px;
+        }
+
+        .location-detail p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .hours-badge {
+            background: var(--light-gray);
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .hours-badge p {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 20px 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            font-size: 11px;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 22px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-item.active i {
+            color: var(--secondary);
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: var(--secondary);
+            color: var(--white);
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 10px 25px rgba(0,166,81,0.4);
+            z-index: 999;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .fab:active {
+            transform: scale(0.9);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            right: 20px;
+            background: var(--dark);
+            color: var(--white);
+            padding: 16px;
+            border-radius: 50px;
+            text-align: center;
+            font-weight: 500;
+            z-index: 2000;
+            animation: slideUp 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            body {
+                max-width: 450px;
+                margin: 0 auto;
+                background: var(--dark);
+                position: relative;
+            }
+            
+            body::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(135deg, var(--primary-dark), var(--dark));
+                z-index: -1;
+            }
+            
+            .status-bar {
+                border-top-left-radius: 30px;
+                border-top-right-radius: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-time" id="liveTime">09:41</div>
+        <div class="status-icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- App Header -->
+    <div class="app-header">
+        <div class="header-top">
+            <h1>Danaku<span>Finance</span></h1>
+            <div class="header-icons">
+                <i class="far fa-bell"></i>
+                <i class="far fa-user-circle"></i>
+            </div>
+        </div>
+        
+        <div class="profile-card">
+            <div class="profile-info">
+                <h3>Halo, Calon Nasabah!</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Semarang, Jawa Tengah</p>
+            </div>
+            <div class="profile-badge">
+                <i class="fas fa-star"></i> Member
+            </div>
+        </div>
+    </div>
+
+    <!-- Balance Card -->
+    <div class="balance-card">
+        <div class="balance-label">
+            <i class="fas fa-wallet"></i> Limit Pinjaman Tersedia
+        </div>
+        <div class="balance-amount">
+            Rp1.000.000 <small>/bln</small>
+        </div>
+        <div class="balance-features">
+            <div class="balance-feature">
+                <i class="fas fa-percent"></i>
+                <span>Bunga 5-10%</span>
+            </div>
+            <div class="balance-feature">
+                <i class="fas fa-clock"></i>
+                <span>Tenor 7-30 hr</span>
+            </div>
+            <div class="balance-feature">
+                <i class="fas fa-bolt"></i>
+                <span>15 Menit</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <div class="section-title">
+            <h2>Layanan Cepat</h2>
+            <a href="#" onclick="document.getElementById('ajukan').scrollIntoView({behavior: 'smooth'})">Ajukan <i class="fas fa-chevron-right"></i></a>
+        </div>
+        <div class="actions-grid">
+            <div class="action-item" onclick="document.getElementById('ajukan').scrollIntoView({behavior: 'smooth'})">
+                <i class="fas fa-hand-holding-usd"></i>
+                <span>Ajukan</span>
+            </div>
+            <div class="action-item" onclick="window.open('https://wa.me/6281223456789', '_blank')">
+                <i class="fab fa-whatsapp"></i>
+                <span>WhatsApp</span>
+            </div>
+            <div class="action-item" onclick="document.getElementById('testimoni-form').scrollIntoView({behavior: 'smooth'})">
+                <i class="fas fa-star"></i>
+                <span>Testimoni</span>
+            </div>
+            <div class="action-item" onclick="document.getElementById('lokasi').scrollIntoView({behavior: 'smooth'})">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Lokasi</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Horizontal Scroll -->
+    <div class="products-section">
+        <div class="section-title">
+            <h2>Produk Pinjaman</h2>
+            <a href="#" onclick="document.getElementById('ajukan').scrollIntoView({behavior: 'smooth'})">Semua <i class="fas fa-chevron-right"></i></a>
+        </div>
+        <div class="products-scroll">
+            <!-- Product 1 -->
+            <div class="product-card-mobile">
+                <div class="product-badge">Populer</div>
+                <div class="product-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3>Pinjaman Elektronik</h3>
+                <div class="product-amount">Rp100-500K</div>
+                <p class="product-desc">Jaminan HP, Speaker, Tablet</p>
+                <button class="btn-product-mobile" onclick="document.getElementById('ajukan').scrollIntoView({behavior: 'smooth'})">Ajukan</button>
+            </div>
+            
+            <!-- Product 2 -->
+            <div class="product-card-mobile">
+                <div class="product-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <h3>Pinjaman Perhiasan</h3>
+                <div class="product-amount">Rp200-800K</div>
+                <p class="product-desc">Emas, Perak, Berlian</p>
+                <button class="btn-product-mobile" onclick="document.getElementById('ajukan').scrollIntoView({behavior: 'smooth'})">Ajukan</button>
+            </div>
+            
+            <!-- Product 3 -->
+            <div class="product-card-mobile">
+                <div class="product-icon">
+                    <i class="fas fa-motorcycle"></i>
+                </div>
+                <h3>Pinjaman BPKB</h3>
+                <div class="product-amount">Rp500K-1Jt</div>
+                <p class="product-desc">BPKB Motor/Mobil</p>
+                <button class="btn-product-mobile" onclick="document.getElementById('ajukan').scrollIntoView({behavior: 'smooth'})">Ajukan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jaminan Info Card -->
+    <div class="jaminan-card-mobile">
+        <div class="jaminan-header-mobile">
+            <h3>Nilai Jaminan</h3>
+            <div class="jaminan-percent">120%</div>
+        </div>
+        <p style="margin-bottom: 20px; font-size: 14px; opacity: 0.9;">Nilai jaminan minimal 120% dari pinjaman + bunga</p>
+        
+        <div class="jaminan-list">
+            <div class="jaminan-item">
+                <div class="jaminan-item-left">
+                    <h4>Elektronik</h4>
+                    <p>HP, Laptop, Speaker</p>
+                </div>
+                <div class="jaminan-value">70-80%</div>
+            </div>
+            <div class="jaminan-item">
+                <div class="jaminan-item-left">
+                    <h4>Perhiasan</h4>
+                    <p>Emas, Perak</p>
+                </div>
+                <div class="jaminan-value">60-70%</div>
+            </div>
+            <div class="jaminan-item">
+                <div class="jaminan-item-left">
+                    <h4>BPKB</h4>
+                    <p>Motor/Mobil</p>
+                </div>
+                <div class="jaminan-value">50-60%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fitur Unggulan Grid -->
+    <div class="features-grid-mobile">
+        <div class="feature-card-mobile">
+            <i class="fas fa-bolt"></i>
+            <h4>Super Cepat</h4>
+            <p>15 menit cair</p>
+        </div>
+        <div class="feature-card-mobile">
+            <i class="fas fa-shield-alt"></i>
+            <h4>Jaminan Aman</h4>
+            <p>Disimpan aman</p>
+        </div>
+        <div class="feature-card-mobile">
+            <i class="fas fa-handshake"></i>
+            <h4>Bisa Nego</h4>
+            <p>Bunga fleksibel</p>
+        </div>
+        <div class="feature-card-mobile">
+            <i class="fas fa-map-marker-alt"></i>
+            <h4>Lokal Semarang</h4>
+            <p>Asli warga sini</p>
+        </div>
+    </div>
+
+    <!-- Form Pengajuan -->
+    <div class="form-card" id="ajukan">
+        <h3>Ajukan Pinjaman</h3>
+        <p>Isi data dengan lengkap, kami akan segera WA balas</p>
+        
+        <form id="pengajuanForm" action="mailto:budi.danaku@gmail.com" method="post" enctype="text/plain">
+            <div class="mobile-form-group">
+                <label><i class="fas fa-user"></i> Nama Lengkap</label>
+                <input type="text" name="nama" placeholder="Contoh: Siti Aminah" required>
+            </div>
+            
+            <div class="mobile-form-group">
+                <label><i class="fab fa-whatsapp"></i> No. WhatsApp</label>
+                <input type="tel" name="wa" placeholder="08123456789" required>
+            </div>
+            
+            <div class="mobile-form-group">
+                <label><i class="fas fa-map-marker-alt"></i> Alamat Lengkap</label>
+                <textarea name="alamat" rows="2" placeholder="Contoh: Jl. Mawar No. 123, Pedurungan, Semarang" required></textarea>
+            </div>
+            
+            <div class="mobile-form-group">
+                <label><i class="fas fa-money-bill-wave"></i> Jumlah Pinjaman (Max Rp 1.000.000)</label>
+                <div class="input-rupiah">
+                    <input type="number" id="jumlahPinjaman" name="jumlah" min="100000" max="1000000" step="10000" placeholder="500000" required>
+                </div>
+                <div class="limit-info" id="limitInfo">Sisa limit: Rp 1.000.000</div>
+            </div>
+            
+            <div class="mobile-form-group">
+                <label><i class="fas fa-gift"></i> Jaminan</label>
+                <input type="text" name="jaminan" placeholder="HP Samsung A10, kondisi 80%" required>
+            </div>
+            
+            <button type="submit" class="btn-mobile-primary">
+                <i class="fas fa-paper-plane"></i> Kirim Pengajuan
+            </button>
+        </form>
+        
+        <a href="https://wa.me/6281223456789?text=Halo%20Danaku%20Finance%2C%20saya%20mau%20pinjam%20uang" class="btn-mobile-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Via WhatsApp Lebih Cepat
+        </a>
+    </div>
+
+    <!-- Session Info -->
+    <div class="session-info" id="sessionInfo">
+        <i class="fas fa-id-card"></i>
+        <span>ID Session Anda: <span id="sessionId">Memuat...</span></span>
+        <span style="margin-left: auto; font-size: 10px;">(Simpan ID ini untuk hapus testimoni)</span>
+    </div>
+
+    <!-- Form Testimoni -->
+    <div class="testimoni-form" id="testimoni-form">
+        <h3><i class="fas fa-pen"></i> Berikan Testimoni</h3>
+        <p style="color: var(--gray); margin-bottom: 15px;">Bagikan pengalaman Anda setelah meminjam</p>
+        
+        <div class="mobile-form-group">
+            <label>Nama Lengkap</label>
+            <input type="text" id="testiNama" placeholder="Nama Anda" maxlength="50" required>
+        </div>
+        
+        <div class="mobile-form-group">
+            <label>Rating</label>
+            <div class="rating-input" id="ratingContainer">
+                <input type="radio" name="rating" value="5" id="star5"><label for="star5">★</label>
+                <input type="radio" name="rating" value="4" id="star4"><label for="star4">★</label>
+                <input type="radio" name="rating" value="3" id="star3"><label for="star3">★</label>
+                <input type="radio" name="rating" value="2" id="star2"><label for="star2">★</label>
+                <input type="radio" name="rating" value="1" id="star1"><label for="star1">★</label>
+            </div>
+        </div>
+        
+        <div class="mobile-form-group">
+            <label>Kecamatan</label>
+            <input type="text" id="testiKecamatan" placeholder="Contoh: Pedurungan" required>
+        </div>
+        
+        <div class="mobile-form-group">
+            <label>Testimoni</label>
+            <textarea id="testiText" rows="3" placeholder="Ceritakan pengalaman Anda..." maxlength="200" required></textarea>
+        </div>
+        
+        <button class="btn-mobile-primary" onclick="submitTestimoni()">
+            <i class="fas fa-paper-plane"></i> Kirim Testimoni
+        </button>
+        
+        <p style="font-size: 11px; color: var(--gray); margin-top: 10px; text-align: center;">
+            <i class="fas fa-info-circle"></i> Anda bisa menghapus testimoni sendiri dengan ID Session yang diberikan
+        </p>
+    </div>
+
+    <!-- Testimonials Live Section -->
+    <div class="testimonials-live" id="testimoni">
+        <div class="testimonial-header-actions">
+            <span class="testimonial-counter" id="testimoniCounter">0 Testimoni</span>
+            <button class="btn-refresh" onclick="refreshTestimonials()">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+        
+        <div class="testimonials-container" id="testimoniContainer">
+            <!-- Testimonials akan muncul di sini via JavaScript -->
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+        </div>
+    </div>
+
+    <!-- Location Card -->
+    <div class="location-card" id="lokasi">
+        <div class="location-header">
+            <i class="fas fa-map-pin"></i>
+            <h3>Kantor & Tempat Ketemuan</h3>
+        </div>
+        
+        <div class="location-detail">
+            <i class="fas fa-map-marker-alt"></i>
+            <p>Jl. Majapahit No. 123, Pedurungan, Semarang (Depan Alfamart)</p>
+        </div>
+        
+        <div class="location-detail">
+            <i class="fas fa-phone-alt"></i>
+            <p>0812-2345-6789 (WA / Telepon)</p>
+        </div>
+        
+        <div class="hours-badge">
+            <p><i class="far fa-clock"></i> Senin-Jumat: 08.00 - 21.00</p>
+            <p><i class="far fa-clock"></i> Sabtu: 08.00 - 20.00</p>
+            <p><i class="far fa-clock"></i> Minggu: 09.00 - 17.00</p>
+        </div>
+        
+        <button class="btn-product-mobile" style="margin-top: 15px;" onclick="window.open('https://maps.google.com?q=Pedurungan+Semarang')">
+            <i class="fas fa-directions"></i> Buka Google Maps
+        </button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="scrollToTop()">
+            <i class="fas fa-home"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="#" class="nav-item" onclick="document.getElementById('ajukan').scrollIntoView({behavior: 'smooth'})">
+            <i class="fas fa-hand-holding-usd"></i>
+            <span>Ajukan</span>
+        </a>
+        <a href="#" class="nav-item" onclick="document.getElementById('testimoni').scrollIntoView({behavior: 'smooth'})">
+            <i class="fas fa-star"></i>
+            <span>Testimoni</span>
+        </a>
+        <a href="#" class="nav-item" onclick="document.getElementById('lokasi').scrollIntoView({behavior: 'smooth'})">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Lokasi</span>
+        </a>
+        <a href="#" class="nav-item" onclick="window.open('https://wa.me/6281223456789', '_blank')">
+            <i class="fab fa-whatsapp"></i>
+            <span>WhatsApp</span>
+        </a>
+    </div>
+
+    <!-- Floating Action Button -->
+    <a href="https://wa.me/6281223456789?text=Halo%20Danaku%20Finance%2C%20saya%20mau%20tanya%20pinjaman" class="fab" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Toast Notification -->
+    <div id="toast" style="display: none;" class="toast"></div>
+
+    <script>
+        // ==================== KONFIGURASI ABLY ====================
+        const ABLY_API_KEY = 'IalL2w.XNDgIw:8Qb-vCs6qS-Erx6Zb0whPaf9A-L-g8Hfg532pXR2KkE';
+        
+        let ably = null;
+        let channel = null;
+        let sessionId = '';
+        
+        // ==================== FUNGSI MEMBUAT TANGGAL ACAK 2024-2026 ====================
+        function randomDate(start, end) {
+            return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+        }
+        
+        // ==================== 27 TESTIMONI PANCINGAN (MANUSIAWI, 2024-2026) ====================
+        function generateSeedTestimonials() {
+            const startDate = new Date('2024-01-01');
+            const endDate = new Date('2026-02-17'); // Hari ini perkiraan
+            
+            return [
+                // 2024 (9 testimoni)
+                {
+                    id: 'seed1',
+                    nama: 'Siti Aminah',
+                    rating: 5,
+                    kecamatan: 'Pedurungan',
+                    testimoni: 'Alhamdulillah, pinjam 500rb jaminan HP Vivo, cuma 15 menit langsung cair. Buat modal jualan gorengan. Makasih ya!',
+                    timestamp: randomDate(new Date('2024-01-15'), new Date('2024-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed2',
+                    nama: 'Bambang',
+                    rating: 5,
+                    kecamatan: 'Tembalang',
+                    testimoni: 'Wis 3x pinjam nang kene. Jaminan BPKB motor Yamaha, dapat 800rb. Bungane ringan, wonge yo ramah. Recomended!',
+                    timestamp: randomDate(new Date('2024-01-15'), new Date('2024-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed3',
+                    nama: 'Ratna',
+                    rating: 4,
+                    kecamatan: 'Banyumanik',
+                    testimoni: 'Pinjam 300rb jaminan kalung perak, buat bayar SPP anak. Proses gampang, ketemuan di Alfamart. Maturnuwun!',
+                    timestamp: randomDate(new Date('2024-01-15'), new Date('2024-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed4',
+                    nama: 'Pak Ahmad',
+                    rating: 5,
+                    kecamatan: 'Gajahmungkur',
+                    testimoni: 'Butuh modal dadakan buat beli dagangan, jaminan jam tangan Seiko second. Dapat 750rb, cukup kok buat putaran.',
+                    timestamp: randomDate(new Date('2024-01-15'), new Date('2024-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed5',
+                    nama: 'Linda',
+                    rating: 5,
+                    kecamatan: 'Candisari',
+                    testimoni: 'Pinjam 200rb jaminan powerbank, buat beli pulsa. Enggak nyangka prosesnya cepet banget, 10 menit udah transfer.',
+                    timestamp: randomDate(new Date('2024-01-15'), new Date('2024-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed6',
+                    nama: 'Mas Bowo',
+                    rating: 5,
+                    kecamatan: 'Genuk',
+                    testimoni: 'Jaminan speaker aktif JBL, dapat 400rb. Buat tambah modal bengkel. Makasih mas budi, orangnya asik diajak ngobrol.',
+                    timestamp: randomDate(new Date('2024-01-15'), new Date('2024-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed7',
+                    nama: 'Mbak Dewi',
+                    rating: 4,
+                    kecamatan: 'Ngaliyan',
+                    testimoni: 'Pinjam 350rb jaminan anting emas. Buat bayar kosan yang nunggak. Lumayan bunganya 7% masih okelah.',
+                    timestamp: randomDate(new Date('2024-01-15'), new Date('2024-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed8',
+                    nama: 'Hendra',
+                    rating: 5,
+                    kecamatan: 'Semarang Barat',
+                    testimoni: 'Pinjam 600rb jaminan laptop acer bekas. Buat beli sparepart motor. Prosesnya enak, bisa ketemuan sepulang kerja.',
+                    timestamp: randomDate(new Date('2024-01-15'), new Date('2024-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed9',
+                    nama: 'Mbak Yanti',
+                    rating: 5,
+                    kecamatan: 'Semarang Utara',
+                    testimoni: 'Jaminan gelang emas, dapat 500rb. Buat modal jualan nasi kucing. Alhamdulillah lancar, wis tak baleni 2x.',
+                    timestamp: randomDate(new Date('2024-01-15'), new Date('2024-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                
+                // 2025 (9 testimoni)
+                {
+                    id: 'seed10',
+                    nama: 'Mas Rudi',
+                    rating: 4,
+                    kecamatan: 'Semarang Timur',
+                    testimoni: 'Pinjam 450rb jaminan kamera pocket. Buat bayar servis motor. Bunganya 8%, masih mending daripada pinjol.',
+                    timestamp: randomDate(new Date('2025-01-01'), new Date('2025-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed11',
+                    nama: 'Ibu Lestari',
+                    rating: 5,
+                    kecamatan: 'Semarang Selatan',
+                    testimoni: 'Wis 2x pinjam nang kene. Jaminan gelang, dapat 300rb. Bisa dicicil, bungane yo ora ngoyo. Recomended tenan!',
+                    timestamp: randomDate(new Date('2025-01-01'), new Date('2025-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed12',
+                    nama: 'Pak Joko',
+                    rating: 5,
+                    kecamatan: 'Gayamsari',
+                    testimoni: 'Pinjam 1jt jaminan BPKB motor supra. Buat modal bengkel tambah beli ban. Proses cepet, sore pinjam malem cair.',
+                    timestamp: randomDate(new Date('2025-01-01'), new Date('2025-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed13',
+                    nama: 'Rina',
+                    rating: 4,
+                    kecamatan: 'Pedurungan',
+                    testimoni: 'Pinjam 250rb jaminan headset Sony. Buat beli sembako. Enggak nyangka headset bekas bisa dipinjamin, makasih ya!',
+                    timestamp: randomDate(new Date('2025-01-01'), new Date('2025-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed14',
+                    nama: 'Agus',
+                    rating: 5,
+                    kecamatan: 'Tembalang',
+                    testimoni: 'Pinjam 400rb jaminan tablet samsung. Buat bayar UKT. Bunganya 5%, nego sama mas budi. Makasih banyak!',
+                    timestamp: randomDate(new Date('2025-01-01'), new Date('2025-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed15',
+                    nama: 'Nurul',
+                    rating: 5,
+                    kecamatan: 'Banyumanik',
+                    testimoni: 'Jaminan tas charles & keith, dapat 350rb. Buat bayar iuran RT. Proses gampang, ketemuan di pinggir jalan.',
+                    timestamp: randomDate(new Date('2025-01-01'), new Date('2025-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed16',
+                    nama: 'Eko',
+                    rating: 4,
+                    kecamatan: 'Gajahmungkur',
+                    testimoni: 'Pinjam 500rb jaminan kipas angin + magicom. Buat modal dagang soto. Lumayan bisa buat putaran.',
+                    timestamp: randomDate(new Date('2025-01-01'), new Date('2025-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed17',
+                    nama: 'Mbak Sari',
+                    rating: 5,
+                    kecamatan: 'Candisari',
+                    testimoni: 'Pinjam 200rb jaminan charger laptop. Buat beli kuota anak sekolah. Makasih ya, bunganya ringan banget.',
+                    timestamp: randomDate(new Date('2025-01-01'), new Date('2025-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed18',
+                    nama: 'Mas Budi',
+                    rating: 5,
+                    kecamatan: 'Genuk',
+                    testimoni: 'Jaminan BPKB motor beat, dapat 900rb. Buat modal beli bahan bangunan. Proses lancar, orangnya amanah.',
+                    timestamp: randomDate(new Date('2025-01-01'), new Date('2025-12-31')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                
+                // 2026 (9 testimoni)
+                {
+                    id: 'seed19',
+                    nama: 'Ani',
+                    rating: 5,
+                    kecamatan: 'Ngaliyan',
+                    testimoni: 'Pinjam 300rb jaminan cincin perak. Buat bayar les anak. Baru minggu lalu, prosesnya cepet banget.',
+                    timestamp: randomDate(new Date('2026-01-01'), new Date('2026-02-17')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed20',
+                    nama: 'Dedi',
+                    rating: 5,
+                    kecamatan: 'Semarang Barat',
+                    testimoni: 'Pinjam 600rb jaminan laptop bekas. Buat beli bahan jualan. Rekomen banget, wis tak reno konco2.',
+                    timestamp: randomDate(new Date('2026-01-01'), new Date('2026-02-17')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed21',
+                    nama: 'Fitri',
+                    rating: 5,
+                    kecamatan: 'Semarang Utara',
+                    testimoni: 'Jaminan jam tangan fossil, dapat 400rb. Buat tambah modal jualan online. Makasih mas, lancar terus.',
+                    timestamp: randomDate(new Date('2026-01-01'), new Date('2026-02-17')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed22',
+                    nama: 'Hasan',
+                    rating: 4,
+                    kecamatan: 'Semarang Timur',
+                    testimoni: 'Pinjam 500rb jaminan HP Xiaomi. Buat bayar kontrakan. Bunganya 8%, okelah dibanding pinjol 20%.',
+                    timestamp: randomDate(new Date('2026-01-01'), new Date('2026-02-17')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed23',
+                    nama: 'Indah',
+                    rating: 5,
+                    kecamatan: 'Semarang Selatan',
+                    testimoni: 'Pinjam 250rb jaminan kalung emas muda. Buat beli susu anak. Proses cepet, 15 menit udah transfer.',
+                    timestamp: randomDate(new Date('2026-01-01'), new Date('2026-02-17')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed24',
+                    nama: 'Junaedi',
+                    rating: 5,
+                    kecamatan: 'Gayamsari',
+                    testimoni: 'Jaminan speaker bluetooth, dapat 200rb. Buat jaga2, siapa tau butuh. Ternyata bener dipake buat beli obat.',
+                    timestamp: randomDate(new Date('2026-01-01'), new Date('2026-02-17')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed25',
+                    nama: 'Kartika',
+                    rating: 4,
+                    kecamatan: 'Pedurungan',
+                    testimoni: 'Pinjam 350rb jaminan tablet advan. Buat beli seragam anak. Prosesnya mudah, ketemuan di depan rumah.',
+                    timestamp: randomDate(new Date('2026-01-01'), new Date('2026-02-17')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed26',
+                    nama: 'Lukman',
+                    rating: 5,
+                    kecamatan: 'Tembalang',
+                    testimoni: 'Wis 4x pinjam nang kene. Jaminan HP, speaker, yo aman wae. Balek utuh. Dipercaya, dipercaya.',
+                    timestamp: randomDate(new Date('2026-01-01'), new Date('2026-02-17')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                },
+                {
+                    id: 'seed27',
+                    nama: 'Murni',
+                    rating: 5,
+                    kecamatan: 'Banyumanik',
+                    testimoni: 'Pinjam 150rb jaminan charger + powerbank. Buat beli pulsa. Enggak nyangka 150rb juga dilayani, makasih ya!',
+                    timestamp: randomDate(new Date('2026-01-01'), new Date('2026-02-17')).toISOString(),
+                    isSeed: true,
+                    sessionId: 'seed'
+                }
+            ];
+        }
+        
+        const seedTestimonials = generateSeedTestimonials();
+        
+        // ==================== GENERATE SESSION ID ====================
+        function generateSessionId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+        
+        // ==================== INISIALISASI ABLY ====================
+        async function initAbly() {
+            try {
+                ably = new Ably.Realtime(ABLY_API_KEY);
+                await ably.connection.once('connected');
+                console.log('Connected to Ably');
+                
+                channel = ably.channels.get('danaku-testimonials');
+                
+                // Subscribe ke channel untuk menerima testimoni baru
+                channel.subscribe('new-testimonial', (message) => {
+                    addTestimonialToUI(message.data);
+                });
+                
+                // Subscribe untuk hapus testimoni
+                channel.subscribe('delete-testimonial', (message) => {
+                    removeTestimonialFromUI(message.data.id);
+                    showToast('Testimoni telah dihapus');
+                });
+                
+                // Load testimonials (seed + existing)
+                await loadTestimonials();
+                
+            } catch (error) {
+                console.error('Ably connection error:', error);
+                showToast('Gagal terhubung ke database. Memuat testimoni lokal...');
+                loadLocalTestimonials();
+            }
+        }
+        
+        // Load testimonials dari history + seed
+        async function loadTestimonials() {
+            if (!channel) {
+                loadLocalTestimonials();
+                return;
+            }
+            
+            try {
+                // Ambil history dari Ably
+                const history = await channel.history({ limit: 100 });
+                
+                const ablyTestimonials = [];
+                history.items.forEach(item => {
+                    if (item.name === 'new-testimonial') {
+                        ablyTestimonials.push(item.data);
+                    }
+                });
+                
+                // Gabungkan dengan seed testimonials
+                let allTestimonials = [...seedTestimonials];
+                
+                // Tambahkan testimoni dari Ably (tapi jangan duplikat seed)
+                ablyTestimonials.forEach(ablyTesti => {
+                    // Cek apakah ini seed atau bukan
+                    const isSeed = seedTestimonials.some(s => 
+                        s.nama === ablyTesti.nama && 
+                        s.testimoni === ablyTesti.testimoni
+                    );
+                    
+                    if (!isSeed) {
+                        allTestimonials.push(ablyTesti);
+                    }
+                });
+                
+                // Urutkan dari terbaru
+                allTestimonials.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                // Tampilkan di UI
+                const container = document.getElementById('testimoniContainer');
+                container.innerHTML = '';
+                
+                allTestimonials.forEach(testi => {
+                    addTestimonialToUI(testi, false);
+                });
+                
+                updateCounter();
+                
+            } catch (error) {
+                console.error('Error loading history:', error);
+                loadLocalTestimonials();
+            }
+        }
+        
+        // Load local testimonials (seed only)
+        function loadLocalTestimonials() {
+            const container = document.getElementById('testimoniContainer');
+            container.innerHTML = '';
+            
+            seedTestimonials.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            seedTestimonials.forEach(testi => {
+                addTestimonialToUI(testi, false);
+            });
+            
+            updateCounter();
+        }
+        
+        // Menambahkan testimoni ke UI
+        function addTestimonialToUI(data, prepend = true) {
+            const container = document.getElementById('testimoniContainer');
+            
+            // Hapus skeleton jika ada
+            const skeletons = container.querySelectorAll('.skeleton');
+            skeletons.forEach(s => s.remove());
+            
+            // Cek duplikasi
+            const existing = Array.from(container.children).find(el => 
+                el.querySelector('.testimonial-name')?.textContent === data.nama &&
+                el.querySelector('.testimonial-text')?.textContent === `"${data.testimoni}"`
+            );
+            
+            if (existing) return;
+            
+            // Buat element testimoni
+            const testiEl = document.createElement('div');
+            testiEl.className = 'testimonial-item';
+            testiEl.setAttribute('data-id', data.id);
+            testiEl.setAttribute('data-session', data.sessionId || '');
+            
+            // Format tanggal
+            const date = new Date(data.timestamp);
+            const timeStr = date.toLocaleString('id-ID', { 
+                day: 'numeric', 
+                month: 'short', 
+                year: 'numeric',
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            // Bintang rating
+            let stars = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < data.rating) {
+                    stars += '<i class="fas fa-star"></i>';
+                } else {
+                    stars += '<i class="far fa-star"></i>';
+                }
+            }
+            
+            // Tombol delete (hanya untuk pemilik testimoni)
+            let deleteButton = '';
+            if (data.sessionId && data.sessionId === sessionId && !data.isSeed) {
+                deleteButton = `
+                    <div class="testimonial-actions">
+                        <button class="btn-delete-testi" onclick="deleteTestimoni('${data.id}', this)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            }
+            
+            testiEl.innerHTML = `
+                ${deleteButton}
+                <div class="testimonial-header">
+                    <span class="testimonial-name">${escapeHtml(data.nama)}</span>
+                    <span class="testimonial-rating">${stars}</span>
+                </div>
+                <div class="testimonial-text">"${escapeHtml(data.testimoni)}"</div>
+                <div class="testimonial-footer">
+                    <span class="testimonial-location"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(data.kecamatan || 'Semarang')}</span>
+                    <span class="testimonial-time"><i class="far fa-calendar-alt"></i> ${timeStr}</span>
+                </div>
+            `;
+            
+            if (prepend) {
+                container.prepend(testiEl);
+                // Scroll ke atas jika ada testimoni baru
+                container.scrollTop = 0;
+            } else {
+                container.appendChild(testiEl);
+            }
+            
+            updateCounter();
+        }
+        
+        // Hapus testimoni dari UI
+        function removeTestimonialFromUI(id) {
+            const container = document.getElementById('testimoniContainer');
+            const items = container.children;
+            
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].getAttribute('data-id') === id) {
+                    items[i].remove();
+                    break;
+                }
+            }
+            
+            updateCounter();
+        }
+        
+        // Hapus testimoni (hanya milik sendiri)
+        async function deleteTestimoni(id, button) {
+            if (!confirm('Yakin ingin menghapus testimoni ini?')) {
+                return;
+            }
+            
+            try {
+                // Publish event delete ke Ably
+                if (channel) {
+                    await channel.publish('delete-testimonial', { id: id });
+                }
+                
+                // Hapus dari UI
+                const testiEl = button.closest('.testimonial-item');
+                testiEl.remove();
+                updateCounter();
+                showToast('Testimoni berhasil dihapus');
+                
+            } catch (error) {
+                console.error('Error deleting testimoni:', error);
+                showToast('Gagal menghapus testimoni');
+            }
+        }
+        
+        // Submit testimoni baru
+        async function submitTestimoni() {
+            const nama = document.getElementById('testiNama').value.trim();
+            const rating = document.querySelector('input[name="rating"]:checked');
+            const kecamatan = document.getElementById('testiKecamatan').value.trim();
+            const testimoni = document.getElementById('testiText').value.trim();
+            
+            // Validasi
+            if (!nama) {
+                showToast('Nama harus diisi');
+                return;
+            }
+            if (!rating) {
+                showToast('Pilih rating dulu');
+                return;
+            }
+            if (!kecamatan) {
+                showToast('Kecamatan harus diisi');
+                return;
+            }
+            if (!testimoni) {
+                showToast('Testimoni harus diisi');
+                return;
+            }
+            if (testimoni.length < 10) {
+                showToast('Testimoni minimal 10 karakter');
+                return;
+            }
+            
+            // Siapkan data
+            const data = {
+                id: `testi_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                nama: nama,
+                rating: parseInt(rating.value),
+                kecamatan: kecamatan,
+                testimoni: testimoni,
+                timestamp: new Date().toISOString(),
+                sessionId: sessionId,
+                isSeed: false
+            };
+            
+            try {
+                // Publish ke Ably
+                if (channel) {
+                    await channel.publish('new-testimonial', data);
+                    
+                    // Reset form
+                    document.getElementById('testiNama').value = '';
+                    document.querySelectorAll('input[name="rating"]').forEach(r => r.checked = false);
+                    document.getElementById('testiKecamatan').value = '';
+                    document.getElementById('testiText').value = '';
+                    
+                    showToast('Terima kasih! Testimoni Anda sudah dikirim');
+                } else {
+                    // Fallback: tambah lokal
+                    addTestimonialToUI(data);
+                    showToast('Testimoni disimpan secara lokal');
+                }
+                
+            } catch (error) {
+                console.error('Error submitting testimoni:', error);
+                showToast('Gagal mengirim testimoni. Coba lagi.');
+            }
+        }
+        
+        // Refresh testimonials
+        async function refreshTestimonials() {
+            const container = document.getElementById('testimoniContainer');
+            container.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
+            
+            if (channel) {
+                await loadTestimonials();
+            } else {
+                loadLocalTestimonials();
+            }
+            
+            showToast('Testimoni diperbarui');
+        }
+        
+        // Escape HTML
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        // Update counter testimoni
+        function updateCounter() {
+            const container = document.getElementById('testimoniContainer');
+            const count = container.children.length;
+            const counterEl = document.getElementById('testimoniCounter');
+            
+            if (count === 0) {
+                counterEl.textContent = '0 Testimoni';
+            } else {
+                counterEl.textContent = `${count} Testimoni`;
+            }
+        }
+        
+        // Show toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Limit jumlah pinjaman
+        document.getElementById('jumlahPinjaman').addEventListener('input', function(e) {
+            let value = parseInt(e.target.value) || 0;
+            const limitInfo = document.getElementById('limitInfo');
+            
+            if (value > 1000000) {
+                e.target.value = 1000000;
+                value = 1000000;
+                limitInfo.innerHTML = 'Maksimal Rp 1.000.000';
+                limitInfo.style.color = 'var(--danger)';
+            } else if (value < 100000 && value !== 0) {
+                limitInfo.innerHTML = 'Minimal Rp 100.000';
+                limitInfo.style.color = 'var(--warning)';
+            } else {
+                const sisa = 1000000 - (value || 0);
+                limitInfo.innerHTML = `Sisa limit: Rp ${sisa.toLocaleString('id-ID')}`;
+                limitInfo.style.color = 'var(--gray)';
+            }
+        });
+        
+        // Live time
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('liveTime').textContent = hours + ':' + minutes;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+        
+        // Scroll to top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Active nav item
+        window.addEventListener('scroll', function() {
+            const sections = [
+                { id: 'home', element: document.body, offset: 0 },
+                { id: 'ajukan', element: document.getElementById('ajukan') },
+                { id: 'testimoni', element: document.getElementById('testimoni') },
+                { id: 'lokasi', element: document.getElementById('lokasi') }
+            ];
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            let scrollPos = window.scrollY + 100;
+            
+            sections.forEach((section, index) => {
+                if (section.element) {
+                    const offset = section.element.offsetTop;
+                    const height = section.element.offsetHeight;
+                    
+                    if (scrollPos >= offset && scrollPos < offset + height) {
+                        navItems.forEach(item => item.classList.remove('active'));
+                        if (navItems[index]) navItems[index].classList.add('active');
+                    }
+                }
+            });
+            
+            if (scrollPos < 200) {
+                navItems.forEach(item => item.classList.remove('active'));
+                navItems[0].classList.add('active');
+            }
+        });
+        
+        // Inisialisasi
+        window.addEventListener('load', function() {
+            // Generate session ID
+            sessionId = generateSessionId();
+            document.getElementById('sessionId').textContent = sessionId;
+            
+            // Inisialisasi Ably
+            initAbly();
+        });
+    </script>
+</body>
+</html>
