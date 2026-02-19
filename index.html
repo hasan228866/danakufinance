@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Youth Fund - Solusi Saat Anda Membutuhkan</title>
+    <title>YouthFund · Mitra Pinjaman Terpercaya</title>
     
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    <!-- Google Fonts: Inter + Lora -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Font: Inter (clean & modern) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
         * {
@@ -19,559 +22,495 @@
         }
 
         :root {
-            --primary: #1e5f74;
-            --primary-dark: #154c5e;
-            --primary-light: #ecf6fa;
-            --secondary: #a58d7b;
-            --accent: #dcb18b;
-            --accent-light: #fdf5ee;
-            --success: #4caf7f;
+            --primary: #0f3b4a;
+            --primary-dark: #0a2b36;
+            --primary-soft: #e5f0f5;
+            --accent: #bf8f5a;
+            --accent-light: #fbf3ea;
             --neutral-100: #ffffff;
-            --neutral-200: #fafcfd;
-            --neutral-300: #f2f7fa;
-            --neutral-400: #e4edf3;
-            --neutral-500: #b2ccda;
-            --neutral-600: #86a9bb;
-            --neutral-700: #5b8196;
-            --neutral-800: #315a6d;
-            --neutral-900: #1b3f4f;
-            --shadow-sm: 0 8px 24px rgba(30, 95, 116, 0.05);
-            --shadow-md: 0 16px 40px rgba(30, 95, 116, 0.07);
-            --shadow-lg: 0 24px 56px rgba(30, 95, 116, 0.1);
-            --border-radius-card: 36px;
+            --neutral-200: #f6fafc;
+            --neutral-300: #eaf1f6;
+            --neutral-400: #d6e3ec;
+            --neutral-500: #a1b9c9;
+            --neutral-600: #6f8b9f;
+            --neutral-700: #4a6577;
+            --neutral-800: #25495e;
+            --neutral-900: #12303e;
+            --shadow-sm: 0 4px 12px rgba(8, 40, 50, 0.06);
+            --shadow-md: 0 8px 24px rgba(8, 40, 50, 0.08);
+            --shadow-lg: 0 20px 48px -8px rgba(8, 40, 50, 0.16);
+            --radius-md: 20px;
+            --radius-lg: 28px;
+            --radius-xl: 36px;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--neutral-200);
+            background-color: var(--neutral-200);
             color: var(--neutral-800);
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         .container {
             max-width: 640px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 20px;
         }
 
-        /* Header */
+        /* loading */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--primary);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loading-logo {
+            width: 88px;
+            height: 88px;
+            background: white;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 600;
+            color: var(--primary);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+            animation: softPulse 1.8s infinite;
+        }
+        @keyframes softPulse {
+            0%,100%{ transform: scale(1); opacity: 0.95; }
+            50%{ transform: scale(1.03); opacity: 1; }
+        }
+
+        /* header */
         .header {
-            background: linear-gradient(160deg, var(--primary) 0%, #2a788f 100%);
+            background: linear-gradient(165deg, var(--primary) 0%, #1b4e60 100%);
             color: white;
-            padding: 40px 0 48px;
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
-            position: relative;
-            margin-bottom: 24px;
+            padding: 32px 0 48px;
+            border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-lg);
         }
-
         .logo {
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin-bottom: 32px;
-            position: relative;
+            gap: 14px;
+            margin-bottom: 24px;
         }
-
         .logo-icon {
             width: 56px;
             height: 56px;
             background: white;
-            border-radius: 18px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            font-weight: 800;
+            font-size: 30px;
+            font-weight: 600;
             color: var(--primary);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
         }
-
         .logo-text h1 {
-            font-family: 'Lora', serif;
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
+            font-size: 30px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
             line-height: 1.1;
         }
-
         .logo-text .tagline {
-            font-size: 14px;
-            opacity: 0.9;
-            font-weight: 300;
-        }
-
-        .hero-quote {
-            font-family: 'Lora', serif;
-            font-size: 22px;
-            font-weight: 500;
-            line-height: 1.4;
-            margin: 24px 0 20px;
-            max-width: 90%;
-            color: rgba(255,255,255,0.95);
-        }
-
-        .hero-quote i {
-            color: var(--accent);
-            margin-right: 8px;
-            font-size: 18px;
-        }
-
-        /* Simple Stats */
-        .simple-stats {
-            display: flex;
-            gap: 28px;
-            margin-top: 24px;
-        }
-
-        .simple-stat-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .simple-stat-number {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .simple-stat-label {
-            font-size: 13px;
+            font-size: 12px;
             opacity: 0.8;
-            font-weight: 300;
+            letter-spacing: 0.5px;
         }
+        .hero-quote {
+            font-size: 18px;
+            font-weight: 400;
+            margin: 20px 0 24px;
+            padding-left: 12px;
+            border-left: 4px solid var(--accent);
+            opacity: 0.95;
+        }
+        .trust-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .trust-badge {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(4px);
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid rgba(255,255,255,0.15);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .trust-badge i { color: var(--accent); }
 
-        /* Story Card */
-        .story-card {
+        /* cards */
+        .card {
             background: white;
-            border-radius: var(--border-radius-card);
-            padding: 36px;
-            margin-bottom: 24px;
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            margin-bottom: 28px;
             box-shadow: var(--shadow-sm);
-            border: 1px solid var(--neutral-400);
-            position: relative;
+            border: 1px solid var(--neutral-300);
+            transition: all 0.2s ease;
         }
-
-        .story-card::before {
-            content: '"';
-            font-family: 'Lora', serif;
-            font-size: 140px;
-            position: absolute;
-            top: -20px;
-            left: 20px;
-            color: var(--neutral-400);
-            opacity: 0.15;
-            z-index: 0;
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--neutral-400);
         }
-
         .story-title {
-            font-family: 'Lora', serif;
             font-size: 26px;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--primary);
-            margin-bottom: 20px;
-            line-height: 1.3;
-            position: relative;
-            z-index: 1;
+            margin-bottom: 16px;
         }
-
         .story-text {
             color: var(--neutral-700);
-            margin-bottom: 20px;
-            font-size: 16px;
-            position: relative;
-            z-index: 1;
+            margin-bottom: 18px;
+            font-size: 15px;
         }
-
         .story-highlight {
             background: var(--accent-light);
-            border-radius: 28px;
+            border-radius: 24px;
             padding: 24px;
-            margin: 28px 0 16px;
-            border: 1px solid rgba(220, 177, 139, 0.3);
+            margin-top: 24px;
+            border-left: 4px solid var(--accent);
         }
-
         .story-highlight p {
-            font-style: italic;
+            font-weight: 500;
             color: var(--neutral-800);
-            font-size: 16px;
         }
 
-        /* Value Cards */
+        /* trust seal */
+        .trust-seal {
+            display: flex;
+            justify-content: space-around;
+            background: white;
+            padding: 18px 10px;
+            border-radius: 60px;
+            margin: 32px 0 28px;
+            border: 1px solid var(--neutral-300);
+            box-shadow: var(--shadow-sm);
+        }
+        .seal-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+        .seal-item i { color: var(--accent); width: 18px; }
+
+        /* value grid */
         .values-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 16px;
             margin: 32px 0;
         }
-
         .value-card {
-            background: var(--neutral-200);
-            border-radius: 28px;
-            padding: 24px 20px;
+            background: white;
+            border-radius: 26px;
+            padding: 24px 16px;
             text-align: center;
-            border: 1px solid var(--neutral-400);
+            border: 1px solid var(--neutral-300);
+            transition: all 0.2s ease;
         }
-
+        .value-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
         .value-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--primary-light);
+            width: 64px;
+            height: 64px;
+            background: var(--primary-soft);
             border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 16px;
+            margin: 0 auto 18px;
             color: var(--primary);
-            font-size: 26px;
+            font-size: 28px;
         }
-
         .value-card h3 {
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 17px;
+            font-weight: 600;
             margin-bottom: 8px;
-            color: var(--neutral-800);
         }
-
         .value-card p {
             font-size: 13px;
             color: var(--neutral-600);
         }
 
-        /* Form Card */
+        /* form */
         .form-card {
             background: white;
-            border-radius: var(--border-radius-card);
-            padding: 36px 32px;
-            margin: 32px 0;
+            border-radius: var(--radius-xl);
+            padding: 36px 28px;
+            margin: 40px 0;
             box-shadow: var(--shadow-lg);
-            border: 1px solid var(--neutral-400);
+            border: 1px solid var(--neutral-300);
         }
-
         .form-title {
-            font-family: 'Lora', serif;
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 30px;
+            font-weight: 600;
             color: var(--primary);
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
-
         .form-description {
             color: var(--neutral-600);
             margin-bottom: 36px;
-            font-size: 15px;
+            padding-left: 14px;
+            border-left: 3px solid var(--accent);
         }
-
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 22px;
         }
-
         .form-group label {
             display: block;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--neutral-700);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
-
         .form-group label i {
             color: var(--accent);
-            width: 22px;
+            width: 20px;
             margin-right: 6px;
         }
-
         .form-control {
             width: 100%;
-            padding: 18px 20px;
+            padding: 16px 20px;
             background: var(--neutral-200);
-            border: 1.5px solid var(--neutral-400);
-            border-radius: 20px;
-            font-size: 16px;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
+            border: 2px solid transparent;
+            border-radius: 18px;
+            font-size: 15px;
+            transition: 0.2s;
         }
-
+        .form-control:hover {
+            background: white;
+            border-color: var(--neutral-400);
+        }
         .form-control:focus {
             outline: none;
-            border-color: var(--primary);
             background: white;
-            box-shadow: 0 0 0 4px rgba(30, 95, 116, 0.08);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(15, 59, 74, 0.1);
         }
-
         select.form-control {
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235b8196' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%234a6577" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>');
             background-repeat: no-repeat;
             background-position: right 20px center;
-            background-size: 16px;
         }
-
         .row-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
         }
 
-        /* Total Pengembalian */
+        /* total */
         .total-card {
-            background: var(--primary-light);
-            border-radius: 28px;
+            background: var(--neutral-200);
+            border-radius: 26px;
             padding: 28px;
-            margin: 28px 0 20px;
-            border: 1px solid rgba(30, 95, 116, 0.2);
+            margin: 30px 0 24px;
+            border: 1px solid var(--neutral-300);
         }
-
         .total-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             padding: 12px 0;
-            border-bottom: 1px solid rgba(30, 95, 116, 0.1);
+            border-bottom: 1px dashed var(--neutral-400);
         }
-
-        .total-row:last-child {
-            border-bottom: none;
-        }
-
+        .total-row:last-child { border-bottom: none; }
         .total-label {
             font-weight: 500;
             color: var(--neutral-700);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-
         .total-value {
             font-weight: 700;
-            font-size: 20px;
-            color: var(--primary-dark);
-        }
-
-        .total-highlight {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 16px;
-            text-align: center;
-        }
-
-        .total-highlight .total-label {
-            font-size: 15px;
-            margin-bottom: 8px;
-        }
-
-        .total-highlight .total-value {
-            font-size: 32px;
-            font-weight: 800;
             color: var(--primary);
         }
-
-        .info-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.5);
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-size: 13px;
-            color: var(--neutral-700);
-            margin-left: 8px;
-        }
-
-        /* Late Charge */
-        .late-charge-card {
-            background: var(--neutral-300);
-            border-radius: 24px;
+        .total-highlight {
+            background: white;
+            border-radius: 22px;
             padding: 22px;
-            margin: 24px 0;
-            border-left: 4px solid var(--accent);
+            margin-top: 24px;
+            text-align: center;
+            border: 1px solid var(--neutral-300);
+        }
+        .total-highlight .total-label {
+            justify-content: center;
+            font-size: 14px;
+        }
+        .total-highlight .total-value {
+            font-size: 38px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .info-badge {
+            background: var(--accent-light);
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-left: 10px;
         }
 
-        .late-charge-title {
+        /* late charge & jaminan */
+        .late-charge-card, .jaminan-card {
+            background: white;
+            border-radius: 26px;
+            padding: 28px;
+            margin: 28px 0;
+            border: 1px solid var(--neutral-300);
+            box-shadow: var(--shadow-sm);
+        }
+        .jaminan-title, .late-charge-title {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-weight: 700;
-            color: var(--neutral-800);
-            margin-bottom: 16px;
-        }
-
-        .late-charge-title i {
-            color: var(--accent);
             font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 22px;
         }
-
-        .late-charge-item {
+        .jaminan-title i, .late-charge-title i { color: var(--accent); }
+        .jaminan-list li {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 15px;
-        }
-
-        .late-charge-label {
+            gap: 14px;
+            margin-bottom: 18px;
             color: var(--neutral-700);
         }
-
-        .late-charge-value {
-            font-weight: 600;
-            color: var(--neutral-800);
+        .jaminan-list li i { color: var(--accent); width: 22px; }
+        .jaminan-diskusi {
+            background: var(--primary-soft);
+            padding: 18px 20px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
         }
-
+        .late-charge-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            font-size: 15px;
+        }
+        .late-charge-value {
+            background: var(--primary-soft);
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: var(--primary);
+        }
         .late-example {
-            background: white;
+            background: var(--neutral-200);
+            padding: 18px;
             border-radius: 16px;
-            padding: 16px;
-            margin-top: 16px;
+            margin-top: 20px;
             font-size: 14px;
         }
 
-        .late-example i {
-            color: var(--accent);
-            margin-right: 8px;
-        }
-
-        /* Jaminan */
-        .jaminan-card {
-            background: var(--neutral-300);
-            border-radius: 28px;
-            padding: 28px;
-            margin: 28px 0;
-        }
-
-        .jaminan-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-
-        .jaminan-list {
-            list-style: none;
-        }
-
-        .jaminan-list li {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 16px;
-            color: var(--neutral-700);
-        }
-
-        .jaminan-list li i {
-            color: var(--success);
-            width: 20px;
-        }
-
-        .jaminan-diskusi {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px dashed var(--neutral-400);
-            font-style: italic;
-            color: var(--neutral-700);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .jaminan-diskusi i {
-            color: var(--accent);
-        }
-
-        /* Button */
+        /* button */
         .btn {
             width: 100%;
-            padding: 22px;
+            padding: 20px;
             border: none;
-            border-radius: 60px;
-            font-size: 18px;
-            font-weight: 700;
+            border-radius: 50px;
+            font-size: 17px;
+            font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+            background: var(--primary);
             color: white;
-            box-shadow: 0 12px 24px rgba(30, 95, 116, 0.25);
+            transition: 0.2s;
+            box-shadow: 0 12px 28px rgba(15, 59, 74, 0.3);
         }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 18px 32px rgba(30, 95, 116, 0.3);
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.02);
+            box-shadow: 0 18px 32px rgba(15, 59, 74, 0.35);
         }
-
+        .btn i { font-size: 22px; }
         .disclaimer {
             font-size: 12px;
             color: var(--neutral-500);
             text-align: center;
-            margin-top: 24px;
+            margin-top: 22px;
         }
 
-        /* Footer */
+        /* footer */
         .footer {
             background: var(--neutral-900);
             color: white;
-            padding: 48px 0 32px;
-            border-top-left-radius: 40px;
-            border-top-right-radius: 40px;
-            margin-top: 48px;
+            padding: 50px 0 36px;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            margin-top: 50px;
         }
-
         .footer h4 {
-            font-family: 'Lora', serif;
-            font-size: 22px;
-            margin-bottom: 20px;
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 18px;
         }
-
         .footer p {
             color: var(--neutral-500);
             font-size: 14px;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
+            line-height: 1.7;
         }
-
-        .footer-contact {
+        .footer-contact, .jam-operasional {
             display: flex;
             align-items: center;
             gap: 16px;
-            margin-bottom: 20px;
-            color: var(--neutral-400);
+            background: rgba(255,255,255,0.03);
+            padding: 16px 18px;
+            border-radius: 60px;
+            margin-bottom: 16px;
+            color: var(--neutral-300);
+            border: 1px solid rgba(255,255,255,0.05);
         }
-
-        .footer-contact i {
-            width: 24px;
-            color: var(--accent);
-        }
-
-        .jam-operasional {
-            color: var(--neutral-400);
-            font-size: 14px;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .jam-operasional i {
-            color: var(--accent);
-            width: 24px;
-            margin-right: 8px;
-        }
-
+        .footer-contact i, .jam-operasional i { color: var(--accent); width: 24px; }
         .copyright {
             text-align: center;
             color: var(--neutral-600);
-            font-size: 13px;
-            margin-top: 40px;
-            padding-top: 24px;
+            font-size: 12px;
+            margin-top: 48px;
+            padding-top: 28px;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Floating WA */
+        /* floating wa */
         .wa-float {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
+            bottom: 28px;
+            right: 28px;
             background: #25D366;
             width: 64px;
             height: 64px;
@@ -580,285 +519,183 @@
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 28px;
-            box-shadow: 0 12px 28px rgba(37, 211, 102, 0.3);
+            font-size: 32px;
+            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3);
             z-index: 100;
-            text-decoration: none;
-            border: 3px solid white;
+            border: 2px solid white;
             transition: 0.2s;
         }
+        .wa-float:hover { transform: scale(1.1); background: #20b859; }
 
-        .wa-float:hover {
-            transform: scale(1.05);
-            background: #20b859;
+        /* mobile */
+        @media (max-width: 480px) {
+            .values-grid { gap: 12px; }
+            .value-card { padding: 20px 10px; }
+            .trust-seal { flex-wrap: wrap; gap: 8px; }
+            .row-2 { grid-template-columns: 1fr; }
+            .card, .form-card { padding: 28px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Floating WhatsApp dengan nomor baru -->
-    <a href="https://wa.me/628895885691" class="wa-float" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <!-- loading -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-logo">YF</div>
+    </div>
 
-    <!-- Header -->
+    <!-- floating WA -->
+    <a href="https://wa.me/628895885691" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+    <!-- header -->
     <header class="header">
         <div class="container">
             <div class="logo">
                 <div class="logo-icon">YF</div>
                 <div class="logo-text">
-                    <h1>Youth Fund</h1>
-                    <div class="tagline">Solusi saat Anda membutuhkan</div>
+                    <h1>YouthFund</h1>
+                    <div class="tagline">MITRA KEUANGAN TERPERCAYA</div>
                 </div>
             </div>
-
             <div class="hero-quote">
-                <i class="fas fa-quote-left"></i> Terkadang jarak antara mimpi dan kenyataan hanyalah masalah dana. Kami di sini untuk menjembataninya.
+                <i class="fas fa-quote-left" style="margin-right: 8px; opacity: 0.7;"></i>Solusi keuangan transparan, tanpa biaya tersembunyi.
             </div>
-
-            <!-- Simple Stats -->
-            <div class="simple-stats">
-                <div class="simple-stat-item">
-                    <span class="simple-stat-number">3 tahun</span>
-                    <span class="simple-stat-label">melayani</span>
-                </div>
-                <div class="simple-stat-item">
-                    <span class="simple-stat-number">100%</span>
-                    <span class="simple-stat-label">amanah</span>
-                </div>
-                <div class="simple-stat-item">
-                    <span class="simple-stat-number">fast</span>
-                    <span class="simple-stat-label">respon</span>
-                </div>
+            <div class="trust-badges">
+                <span class="trust-badge"><i class="fas fa-check-circle"></i> 3 tahun melayani</span>
+                <span class="trust-badge"><i class="fas fa-shield-alt"></i> 100% amanah</span>
+                <span class="trust-badge"><i class="fas fa-bolt"></i> fast response</span>
             </div>
         </div>
     </header>
 
     <main class="container">
-        <!-- Story Section -->
-        <section class="story-card">
-            <h2 class="story-title">Setiap orang punya cerita</h2>
-            <p class="story-text">Ada yang butuh tambahan modal untuk dagangannya yang mulai ramai. Ada yang perlu dana cepat karena anggota keluarga sakit. Ada juga mahasiswa yang membutuhkan untuk membayar uang kos dan keperluan kuliah.</p>
-            <p class="story-text">Youth Fund hadir bukan sebagai pemberi pinjaman semata, tetapi sebagai mitra yang memahami bahwa setiap rupiah memiliki cerita dan tujuan.</p>
-            
+        <!-- story -->
+        <div class="card" data-aos="fade-up">
+            <h2 class="story-title">Komitmen kami</h2>
+            <p class="story-text">Setiap pengajuan pinjaman adalah awal dari hubungan saling percaya. Kami hadir dengan proses yang jelas, jaminan yang aman, dan komunikasi yang hangat.</p>
             <div class="story-highlight">
-                <p>"Kami percaya, dengan sistem yang transparan dan manusiawi, pinjaman kecil bisa memberi dampak besar tanpa menjadi beban."</p>
-            </div>
-        </section>
-
-        <!-- Value Cards -->
-        <div class="values-grid">
-            <div class="value-card">
-                <div class="value-icon"><i class="fas fa-hand-holding-heart"></i></div>
-                <h3>Manusiawi</h3>
-                <p>Kami mendengarkan dan memahami kebutuhan Anda</p>
-            </div>
-            <div class="value-card">
-                <div class="value-icon"><i class="fas fa-balance-scale"></i></div>
-                <h3>Transparan</h3>
-                <p>Tak ada biaya tersembunyi, semua jelas dari awal</p>
-            </div>
-            <div class="value-card">
-                <div class="value-icon"><i class="fas fa-clock"></i></div>
-                <h3>Cepat</h3>
-                <p>Proses sederhana, dana bisa cair di hari yang sama</p>
-            </div>
-            <div class="value-card">
-                <div class="value-icon"><i class="fas fa-shield-alt"></i></div>
-                <h3>Terpercaya</h3>
-                <p>Sistem jaminan yang aman untuk kedua belah pihak</p>
+                <p>“Pinjaman jelas, jaminan aman, hubungan saling menguntungkan.”</p>
             </div>
         </div>
 
-        <!-- Form Card -->
-        <div class="form-card">
+        <!-- trust seal -->
+        <div class="trust-seal" data-aos="fade-up">
+            <div class="seal-item"><i class="fas fa-file-contract"></i> Proses transparan</div>
+            <div class="seal-item"><i class="fas fa-handshake"></i> Jaminan negosiasi</div>
+            <div class="seal-item"><i class="fas fa-clock"></i> Cair hari ini</div>
+        </div>
+
+        <!-- values -->
+        <div class="values-grid">
+            <div class="value-card" data-aos="flip-left"><div class="value-icon"><i class="fas fa-hand-holding-heart"></i></div><h3>Manusiawi</h3><p>Empati dalam setiap proses</p></div>
+            <div class="value-card" data-aos="flip-left"><div class="value-icon"><i class="fas fa-balance-scale"></i></div><h3>Transparan</h3><p>Tanpa biaya tersembunyi</p></div>
+            <div class="value-card" data-aos="flip-left"><div class="value-icon"><i class="fas fa-bolt"></i></div><h3>Cepat</h3><p>Cair di hari yang sama</p></div>
+            <div class="value-card" data-aos="flip-left"><div class="value-icon"><i class="fas fa-shield-alt"></i></div><h3>Amanah</h3><p>Jaminan dikembalikan 100%</p></div>
+        </div>
+
+        <!-- form card -->
+        <div class="form-card" data-aos="fade-up">
             <h3 class="form-title">Ajukan pinjaman</h3>
-            <p class="form-description">Isi form di bawah, tim kami akan segera menghubungi via WhatsApp untuk membahas lebih lanjut.</p>
-
+            <p class="form-description">Isi data berikut, kami akan segera menghubungi via WhatsApp.</p>
             <form id="loanForm">
-                <div class="form-group">
-                    <label><i class="fas fa-user"></i> Nama lengkap</label>
-                    <input type="text" class="form-control" id="nama" required>
-                </div>
-
+                <div class="form-group"><label><i class="fas fa-user"></i> Nama lengkap</label><input type="text" class="form-control" id="nama" required></div>
                 <div class="row-2">
-                    <div class="form-group">
-                        <label><i class="fas fa-phone-alt"></i> Nomor WhatsApp</label>
-                        <input type="tel" class="form-control" id="wa" required>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-calendar-alt"></i> Usia</label>
-                        <input type="number" class="form-control" id="usia" required>
-                    </div>
+                    <div class="form-group"><label><i class="fas fa-phone-alt"></i> WhatsApp</label><input type="tel" class="form-control" id="wa" required></div>
+                    <div class="form-group"><label><i class="fas fa-calendar-alt"></i> Usia</label><input type="number" class="form-control" id="usia" required></div>
                 </div>
-
-                <div class="form-group">
-                    <label><i class="fas fa-map-marker-alt"></i> Domisili</label>
-                    <input type="text" class="form-control" id="domisili" required>
-                </div>
-
+                <div class="form-group"><label><i class="fas fa-map-marker-alt"></i> Domisili</label><input type="text" class="form-control" id="domisili" required></div>
                 <div class="row-2">
-                    <div class="form-group">
-                        <label><i class="fas fa-money-bill-wave"></i> Jumlah pinjaman</label>
+                    <div class="form-group"><label><i class="fas fa-money-bill-wave"></i> Jumlah pinjaman</label>
                         <select class="form-control" id="jumlah" required onchange="updateTotal()">
                             <option value="" disabled selected>Pilih nominal</option>
                             <option value="200000">Rp 200.000</option>
                             <option value="300000">Rp 300.000</option>
                             <option value="400000">Rp 400.000</option>
                             <option value="500000">Rp 500.000</option>
-                            <option value="600000">Rp 600.000</option>
+                            <option value="600000" selected>Rp 600.000</option>
                             <option value="700000">Rp 700.000</option>
                             <option value="800000">Rp 800.000</option>
                             <option value="900000">Rp 900.000</option>
                             <option value="1000000">Rp 1.000.000</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-clock"></i> Tenor</label>
-                        <select class="form-control" id="tenor" required>
-                            <option value="" disabled selected>Pilih tenor</option>
-                            <option value="30 hari">30 hari</option>
-                        </select>
+                    <div class="form-group"><label><i class="fas fa-clock"></i> Tenor</label>
+                        <select class="form-control" id="tenor" required><option value="30 hari" selected>30 Hari</option></select>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label><i class="fas fa-gem"></i> Jenis jaminan</label>
+                <div class="form-group"><label><i class="fas fa-gem"></i> Jenis jaminan</label>
                     <select class="form-control" id="jaminan" required>
                         <option value="" disabled selected>Pilih jenis jaminan</option>
                         <option value="BPKB Motor">BPKB Motor</option>
                         <option value="BPKB Mobil">BPKB Mobil</option>
                         <option value="Sertifikat Tanah/Rumah">Sertifikat Tanah/Rumah</option>
                         <option value="SK Kerja">SK Kerja</option>
-                        <option value="Elektronik">Elektronik (Laptop/HP/TV)</option>
+                        <option value="Elektronik">Elektronik (laptop/HP/TV)</option>
                     </select>
                 </div>
+                <div class="form-group"><label><i class="fas fa-briefcase"></i> Tujuan pinjaman</label><input type="text" class="form-control" id="tujuan" required></div>
+                <div class="form-group"><label><i class="fas fa-comment"></i> Catatan (opsional)</label><input type="text" class="form-control" id="catatan"></div>
 
-                <div class="form-group">
-                    <label><i class="fas fa-briefcase"></i> Tujuan pinjaman</label>
-                    <input type="text" class="form-control" id="tujuan" required>
-                </div>
-
-                <div class="form-group">
-                    <label><i class="fas fa-comment"></i> Catatan (opsional)</label>
-                    <input type="text" class="form-control" id="catatan">
-                </div>
-
-                <!-- Auto-calculate Total -->
+                <!-- total -->
                 <div class="total-card">
-                    <div class="total-row">
-                        <span class="total-label">Pinjaman pokok</span>
-                        <span class="total-value" id="pokokDisplay">Rp 0</span>
-                    </div>
-                    <div class="total-row">
-                        <span class="total-label">
-                            Kontribusi mitra
-                            <span class="info-badge">10rb per 100rb</span>
-                        </span>
-                        <span class="total-value" id="tambahanDisplay">Rp 0</span>
-                    </div>
-                    
+                    <div class="total-row"><span class="total-label"><i class="fas fa-coins"></i> Pinjaman pokok</span><span class="total-value" id="pokokDisplay">Rp 600.000</span></div>
+                    <div class="total-row"><span class="total-label"><i class="fas fa-handshake"></i> Kontribusi mitra <span class="info-badge">10rb/100rb</span></span><span class="total-value" id="tambahanDisplay">Rp 60.000</span></div>
                     <div class="total-highlight">
                         <div class="total-label">Total pengembalian (30 hari)</div>
-                        <div class="total-value" id="totalDisplay">Rp 0</div>
-                        <p style="font-size: 13px; color: var(--neutral-600); margin-top: 8px;">Sudah termasuk kontribusi mitra 10rb/100rb</p>
+                        <div class="total-value" id="totalDisplay">Rp 660.000</div>
                     </div>
                 </div>
 
-                <!-- Late Charge Information -->
+                <!-- late charge -->
                 <div class="late-charge-card">
-                    <div class="late-charge-title">
-                        <i class="fas fa-clock"></i>
-                        <span>Jika melewati jatuh tempo</span>
-                    </div>
-                    
-                    <div class="late-charge-item">
-                        <span class="late-charge-label">Tambahan per bulan keterlambatan</span>
-                        <span class="late-charge-value">10rb per 100rb pinjaman</span>
-                    </div>
-                    
-                    <div class="late-example">
-                        <i class="fas fa-calculator"></i> 
-                        <strong>Contoh:</strong> Pinjam Rp500.000, jatuh tempo Rp550.000. Jika terlambat 1 bulan, menjadi Rp600.000. Jika terlambat 2 bulan, menjadi Rp650.000.
-                    </div>
-                    
-                    <p style="font-size: 13px; color: var(--neutral-600); margin-top: 12px;">
-                        *Kami selalu mengutamakan komunikasi. Jika ada kendala, diskusikan dengan kami.
-                    </p>
+                    <div class="late-charge-title"><i class="fas fa-clock"></i> Ketentuan keterlambatan</div>
+                    <div class="late-charge-item"><span class="late-charge-label">Tambahan per bulan</span><span class="late-charge-value">10rb/100rb</span></div>
+                    <div class="late-example"><i class="fas fa-calculator"></i> Contoh: pinjam Rp500.000 (total Rp550.000), telat 1 bln jadi Rp600.000, telat 2 bln Rp650.000.</div>
                 </div>
 
-                <!-- Jaminan Info -->
+                <!-- sistem jaminan -->
                 <div class="jaminan-card">
-                    <div class="jaminan-title">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>Sistem jaminan</span>
-                    </div>
+                    <div class="jaminan-title"><i class="fas fa-shield-alt"></i> Sistem jaminan</div>
                     <ul class="jaminan-list">
-                        <li><i class="fas fa-check-circle"></i> Jaminan disimpan selama masa pinjaman (30 hari)</li>
+                        <li><i class="fas fa-check-circle"></i> Jaminan disimpan selama 30 hari</li>
                         <li><i class="fas fa-check-circle"></i> Dikembalikan 100% saat pelunasan</li>
-                        <li><i class="fas fa-check-circle"></i> Pencairan dilakukan secara langsung (tatap muka)</li>
+                        <li><i class="fas fa-check-circle"></i> Pencairan tatap muka</li>
                     </ul>
-                    
-                    <!-- Bagian yang diubah: dari bunga bisa diskusi menjadi jaminan bisa didiskusikan -->
-                    <div class="jaminan-diskusi">
-                        <i class="fas fa-handshake"></i>
-                        <span>Jaminan dapat didiskusikan sesuai kesepakatan</span>
-                    </div>
+                    <div class="jaminan-diskusi"><i class="fas fa-handshake"></i> Jaminan dapat didiskusikan</div>
                 </div>
 
-                <button type="button" class="btn btn-primary" id="submitBtn">
-                    <i class="fab fa-whatsapp"></i> Kirim pengajuan via WhatsApp
-                </button>
-
-                <p class="disclaimer">
-                    Dengan mengirimkan form, Anda menyetujui syarat dan ketentuan Youth Fund.
-                </p>
+                <button type="button" class="btn" id="submitBtn"><i class="fab fa-whatsapp"></i> Kirim pengajuan via WhatsApp</button>
+                <p class="disclaimer">Dengan mengirim, Anda menyetujui syarat & ketentuan YouthFund.</p>
             </form>
         </div>
     </main>
 
-    <!-- Footer -->
+    <!-- footer -->
     <footer class="footer">
         <div class="container">
-            <h4>Youth Fund</h4>
-            <p>Bersama mengatasi tantangan finansial, menciptakan peluang, dan mewujudkan rencana.</p>
-
-            <div class="footer-contact">
-                <i class="fab fa-whatsapp"></i>
-                <span>+62 895-8858-5691</span>
-            </div>
-            
-            <div class="jam-operasional">
-                <i class="far fa-clock"></i> Senin - Sabtu, 07.00 - 17.00
-            </div>
-
-            <div class="copyright">
-                © 2025 Youth Fund. All rights reserved.
-            </div>
+            <h4>YouthFund</h4>
+            <p>Mitra keuangan terpercaya yang mengutamakan transparansi, keamanan, dan kenyamanan.</p>
+            <div class="footer-contact"><i class="fab fa-whatsapp"></i> +62 895-8858-5691</div>
+            <div class="jam-operasional"><i class="far fa-clock"></i> Senin - Sabtu, 07.00 - 17.00 WIB</div>
+            <div class="copyright">© 2025 YouthFund. All rights reserved.</div>
         </div>
     </footer>
 
+    <!-- AOS & scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        AOS.init({ duration: 600, once: true, offset: 30 });
+        window.addEventListener('load', function() {
+            setTimeout(() => document.getElementById('loadingOverlay').classList.add('hidden'), 1600);
+            updateTotal(); // set initial total from selected 600k
+        });
+
         function updateTotal() {
-            const jumlahSelect = document.getElementById('jumlah');
-            const pokokDisplay = document.getElementById('pokokDisplay');
-            const tambahanDisplay = document.getElementById('tambahanDisplay');
-            const totalDisplay = document.getElementById('totalDisplay');
-
-            if (!jumlahSelect.value) {
-                pokokDisplay.textContent = 'Rp 0';
-                tambahanDisplay.textContent = 'Rp 0';
-                totalDisplay.textContent = 'Rp 0';
-                return;
-            }
-
-            const jumlah = parseInt(jumlahSelect.value);
+            const jumlah = parseInt(document.getElementById('jumlah').value) || 0;
             const tambahan = (jumlah / 100000) * 10000;
-            const total = jumlah + tambahan;
-
-            pokokDisplay.textContent = `Rp ${jumlah.toLocaleString('id-ID')}`;
-            tambahanDisplay.textContent = `Rp ${tambahan.toLocaleString('id-ID')}`;
-            totalDisplay.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+            document.getElementById('pokokDisplay').innerText = `Rp ${jumlah.toLocaleString('id-ID')}`;
+            document.getElementById('tambahanDisplay').innerText = `Rp ${tambahan.toLocaleString('id-ID')}`;
+            document.getElementById('totalDisplay').innerText = `Rp ${(jumlah + tambahan).toLocaleString('id-ID')}`;
         }
 
         document.getElementById('submitBtn').addEventListener('click', function() {
@@ -872,60 +709,39 @@
             const tujuan = document.getElementById('tujuan').value.trim();
             const catatan = document.getElementById('catatan').value.trim();
 
-            if (!nama || !wa || !usia || !domisili || !jumlah || !tenor || !jaminan || !tujuan) {
-                alert('Harap lengkapi semua field yang wajib diisi');
+            if (!nama || !wa || !usia || !domisili || !jumlah || !jaminan || !tujuan) {
+                alert('Harap lengkapi semua field wajib');
                 return;
             }
 
-            let waFormat = wa;
-            if (waFormat.startsWith('0')) {
-                waFormat = '62' + waFormat.substring(1);
-            }
-            waFormat = waFormat.replace(/\D/g, '');
-
-            // Nomor tujuan
-            const nomorTujuan = '628895885691';
+            let waFormat = wa.replace(/\D/g, '');
+            if (waFormat.startsWith('0')) waFormat = '62' + waFormat.slice(1);
 
             const jumlahNum = parseInt(jumlah);
             const tambahan = (jumlahNum / 100000) * 10000;
-            const totalKembali = jumlahNum + tambahan;
-            const chargePerBulan = (jumlahNum / 100000) * 10000;
+            const total = jumlahNum + tambahan;
+            const charge = (jumlahNum / 100000) * 10000;
 
-            const pesan = `*PENGAJUAN PINJAMAN YOUTH FUND*
+            const pesan = `*YOUTHFUND - PENGAJUAN PINJAMAN*
+• Nama: ${nama}
+• WA: ${wa}
+• Usia: ${usia}
+• Domisili: ${domisili}
+• Pinjaman: Rp ${jumlahNum.toLocaleString('id-ID')}
+• Tenor: ${tenor}
+• Jaminan: ${jaminan}
+• Tujuan: ${tujuan}
+• Catatan: ${catatan || '-'}
 
-DATA PEMOHON:
-Nama: ${nama}
-WhatsApp: ${wa}
-Usia: ${usia}
-Domisili: ${domisili}
+Rincian:
+Pinjaman Pokok: Rp ${jumlahNum.toLocaleString('id-ID')}
+Kontribusi Mitra: Rp ${tambahan.toLocaleString('id-ID')}
+Total Pengembalian: Rp ${total.toLocaleString('id-ID')}
+Denda per bulan: Rp ${charge.toLocaleString('id-ID')}
 
-DETAIL PINJAMAN:
-Jumlah: Rp ${jumlahNum.toLocaleString('id-ID')}
-Tenor: ${tenor}
-Jaminan: ${jaminan}
-Tujuan: ${tujuan}
-Catatan: ${catatan || '-'}
+Saya setuju untuk diskusi lebih lanjut.`;
 
-RINCIAN PENGEMBALIAN:
-Pinjaman pokok: Rp ${jumlahNum.toLocaleString('id-ID')}
-Kontribusi mitra (10rb/100rb): Rp ${tambahan.toLocaleString('id-ID')}
-Total pengembalian: Rp ${totalKembali.toLocaleString('id-ID')}
-
-INFORMASI KETERLAMBATAN:
-Jika melewati jatuh tempo, akan ditambahkan Rp ${chargePerBulan.toLocaleString('id-ID')} per bulan keterlambatan.
-
-Saya mengajukan pinjaman dan siap mendiskusikan lebih lanjut. Terima kasih.`;
-
-            const pesanEncoded = encodeURIComponent(pesan);
-            const urlWA = `https://wa.me/${nomorTujuan}?text=${pesanEncoded}`;
-            window.open(urlWA, '_blank');
-        });
-
-        window.addEventListener('load', function() {
-            const jumlahSelect = document.getElementById('jumlah');
-            if (jumlahSelect.value) {
-                updateTotal();
-            }
+            window.open(`https://wa.me/628895885691?text=${encodeURIComponent(pesan)}`, '_blank');
         });
     </script>
 </body>
