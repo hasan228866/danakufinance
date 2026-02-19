@@ -2,220 +2,312 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>YouthFund · Mitra Pinjaman Terpercaya</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Youth Fund - Mitra Pinjaman Terpercaya</title>
     
-    <!-- Font Awesome 6 -->
+    <!-- Font Awesome 6 (CDN yang stabil) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    <!-- Google Font: Inter (clean & modern) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Inter Modern + Cormorant Garamond -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
+        /* Reset total dan anti-cacat mobile */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
         }
 
+        /* Root variables */
         :root {
-            --primary: #0f3b4a;
-            --primary-dark: #0a2b36;
-            --primary-soft: #e5f0f5;
-            --accent: #bf8f5a;
-            --accent-light: #fbf3ea;
+            --primary: #0a3442;
+            --primary-dark: #06212b;
+            --primary-light: #eef3f5;
+            --accent: #b58b5d;
+            --accent-light: #faf3ec;
             --neutral-100: #ffffff;
-            --neutral-200: #f6fafc;
-            --neutral-300: #eaf1f6;
-            --neutral-400: #d6e3ec;
-            --neutral-500: #a1b9c9;
-            --neutral-600: #6f8b9f;
-            --neutral-700: #4a6577;
-            --neutral-800: #25495e;
-            --neutral-900: #12303e;
-            --shadow-sm: 0 4px 12px rgba(8, 40, 50, 0.06);
-            --shadow-md: 0 8px 24px rgba(8, 40, 50, 0.08);
-            --shadow-lg: 0 20px 48px -8px rgba(8, 40, 50, 0.16);
-            --radius-md: 20px;
-            --radius-lg: 28px;
-            --radius-xl: 36px;
+            --neutral-200: #f9fbfc;
+            --neutral-300: #f0f5f8;
+            --neutral-400: #e2eaf0;
+            --neutral-500: #b8ccd8;
+            --neutral-600: #8fa7b7;
+            --neutral-700: #5f7e91;
+            --neutral-800: #345569;
+            --neutral-900: #1e3845;
+            --shadow-sm: 0 4px 12px rgba(10, 52, 66, 0.08);
+            --shadow-md: 0 8px 24px rgba(10, 52, 66, 0.12);
+            --shadow-lg: 0 16px 40px rgba(10, 52, 66, 0.16);
+            --radius-sm: 16px;
+            --radius-md: 24px;
+            --radius-lg: 32px;
+            --radius-xl: 40px;
         }
 
+        /* Body anti overflow dan smooth */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--neutral-200);
+            background: var(--neutral-200);
             color: var(--neutral-800);
             line-height: 1.5;
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
+            width: 100%;
             max-width: 640px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        /* loading */
+        /* ===== LOADING ANIMATION PREMIUM ===== */
         .loading-overlay {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: var(--primary);
             z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
         .loading-overlay.hidden {
             opacity: 0;
             visibility: hidden;
         }
+        .loading-content {
+            text-align: center;
+            transform: translateY(0);
+            animation: gentleFloat 2s infinite ease-in-out;
+        }
         .loading-logo {
-            width: 88px;
-            height: 88px;
+            width: 100px;
+            height: 100px;
             background: white;
-            border-radius: 28px;
+            border-radius: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
-            font-weight: 600;
+            margin: 0 auto 24px;
+            font-size: 48px;
+            font-weight: 700;
+            font-family: 'Cormorant Garamond', serif;
             color: var(--primary);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+        .loading-text {
+            color: white;
+            font-size: 18px;
+            letter-spacing: 2px;
+            font-weight: 300;
+            opacity: 0.8;
             animation: softPulse 1.8s infinite;
         }
+        @keyframes gentleFloat {
+            0%,100%{ transform: translateY(0); }
+            50%{ transform: translateY(-8px); }
+        }
         @keyframes softPulse {
-            0%,100%{ transform: scale(1); opacity: 0.95; }
-            50%{ transform: scale(1.03); opacity: 1; }
+            0%,100%{ opacity: 0.6; }
+            50%{ opacity: 1; }
         }
 
-        /* header */
+        /* ===== HEADER PREMIUM ===== */
         .header {
-            background: linear-gradient(165deg, var(--primary) 0%, #1b4e60 100%);
+            background: linear-gradient(165deg, var(--primary) 0%, #1d5062 100%);
             color: white;
-            padding: 32px 0 48px;
+            padding: 32px 0 52px;
             border-radius: 0 0 var(--radius-xl) var(--radius-xl);
             margin-bottom: 28px;
             box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
         }
         .logo {
             display: flex;
             align-items: center;
-            gap: 14px;
-            margin-bottom: 24px;
+            gap: 16px;
+            margin-bottom: 28px;
+            position: relative;
+            z-index: 2;
         }
         .logo-icon {
             width: 56px;
             height: 56px;
             background: white;
-            border-radius: 16px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
-            font-weight: 600;
+            font-size: 32px;
+            font-weight: 700;
+            font-family: 'Cormorant Garamond', serif;
             color: var(--primary);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.2);
+            flex-shrink: 0;
         }
         .logo-text h1 {
-            font-size: 30px;
-            font-weight: 600;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            font-weight: 700;
             letter-spacing: -0.3px;
             line-height: 1.1;
         }
         .logo-text .tagline {
-            font-size: 12px;
+            font-size: 11px;
             opacity: 0.8;
-            letter-spacing: 0.5px;
+            letter-spacing: 1.5px;
+            margin-top: 4px;
         }
         .hero-quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 500;
+            line-height: 1.4;
+            margin: 24px 0 28px;
+            color: rgba(255,255,255,0.95);
+            font-style: italic;
+            padding-right: 20px;
+        }
+        .hero-quote i {
+            color: var(--accent);
+            margin-right: 8px;
             font-size: 18px;
-            font-weight: 400;
-            margin: 20px 0 24px;
-            padding-left: 12px;
-            border-left: 4px solid var(--accent);
-            opacity: 0.95;
         }
         .trust-badges {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
+            margin-top: 16px;
         }
         .trust-badge {
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(4px);
-            padding: 8px 18px;
-            border-radius: 40px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 10px 18px;
+            border-radius: 50px;
             font-size: 13px;
             font-weight: 500;
-            border: 1px solid rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
-        .trust-badge i { color: var(--accent); }
+        .trust-badge i {
+            color: var(--accent);
+            font-size: 14px;
+        }
 
-        /* cards */
-        .card {
+        /* ===== STORY CARD ===== */
+        .story-card {
             background: white;
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-xl);
             padding: 32px 28px;
             margin-bottom: 28px;
             box-shadow: var(--shadow-sm);
-            border: 1px solid var(--neutral-300);
-            transition: all 0.2s ease;
+            border: 1px solid var(--neutral-400);
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .card:hover {
-            box-shadow: var(--shadow-md);
-            border-color: var(--neutral-400);
+        .story-card:active {
+            transform: scale(0.99);
+        }
+        .story-card::before {
+            content: '"';
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 140px;
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            color: var(--neutral-400);
+            opacity: 0.2;
+            line-height: 1;
         }
         .story-title {
-            font-size: 26px;
-            font-weight: 600;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 700;
             color: var(--primary);
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
         }
         .story-text {
             color: var(--neutral-700);
             margin-bottom: 18px;
             font-size: 15px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
         }
         .story-highlight {
             background: var(--accent-light);
             border-radius: 24px;
             padding: 24px;
             margin-top: 24px;
-            border-left: 4px solid var(--accent);
+            border: 1px solid rgba(181,139,93,0.2);
         }
         .story-highlight p {
-            font-weight: 500;
+            font-style: italic;
             color: var(--neutral-800);
+            font-size: 16px;
+            font-weight: 500;
         }
 
-        /* trust seal */
+        /* ===== TRUST SEAL ===== */
         .trust-seal {
             display: flex;
             justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 32px 0 24px;
+            padding: 16px 12px;
             background: white;
-            padding: 18px 10px;
             border-radius: 60px;
-            margin: 32px 0 28px;
-            border: 1px solid var(--neutral-300);
             box-shadow: var(--shadow-sm);
+            border: 1px solid var(--neutral-400);
         }
         .seal-item {
             display: flex;
             align-items: center;
             gap: 8px;
+            color: var(--neutral-700);
             font-size: 13px;
             font-weight: 600;
-            color: var(--neutral-700);
+            white-space: nowrap;
         }
-        .seal-item i { color: var(--accent); width: 18px; }
+        .seal-item i {
+            color: var(--accent);
+            font-size: 16px;
+        }
 
-        /* value grid */
+        /* ===== VALUE CARDS ===== */
         .values-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -227,58 +319,75 @@
             border-radius: 26px;
             padding: 24px 16px;
             text-align: center;
-            border: 1px solid var(--neutral-300);
+            border: 1px solid var(--neutral-400);
             transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
         }
-        .value-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-4px);
+        .value-card:active {
+            transform: scale(0.97);
+            background: var(--neutral-200);
         }
         .value-icon {
             width: 64px;
             height: 64px;
-            background: var(--primary-soft);
+            background: linear-gradient(145deg, var(--primary-light), white);
             border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 18px;
+            margin: 0 auto 16px;
             color: var(--primary);
             font-size: 28px;
+            border: 1px solid rgba(10,52,66,0.1);
         }
         .value-card h3 {
             font-size: 17px;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 8px;
+            color: var(--neutral-800);
         }
         .value-card p {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--neutral-600);
+            line-height: 1.4;
         }
 
-        /* form */
+        /* ===== FORM CARD ===== */
         .form-card {
             background: white;
             border-radius: var(--radius-xl);
-            padding: 36px 28px;
+            padding: 36px 24px;
             margin: 40px 0;
             box-shadow: var(--shadow-lg);
-            border: 1px solid var(--neutral-300);
+            border: 1px solid var(--neutral-400);
+            position: relative;
+        }
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
         }
         .form-title {
+            font-family: 'Cormorant Garamond', serif;
             font-size: 30px;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--primary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .form-description {
             color: var(--neutral-600);
-            margin-bottom: 36px;
-            padding-left: 14px;
+            margin-bottom: 32px;
+            font-size: 14px;
             border-left: 3px solid var(--accent);
+            padding-left: 16px;
         }
         .form-group {
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
         .form-group label {
             display: block;
@@ -293,154 +402,185 @@
             color: var(--accent);
             width: 20px;
             margin-right: 6px;
+            font-size: 14px;
         }
         .form-control {
             width: 100%;
-            padding: 16px 20px;
+            padding: 16px 18px;
             background: var(--neutral-200);
             border: 2px solid transparent;
             border-radius: 18px;
             font-size: 15px;
-            transition: 0.2s;
-        }
-        .form-control:hover {
-            background: white;
-            border-color: var(--neutral-400);
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
+            appearance: none;
         }
         .form-control:focus {
             outline: none;
             background: white;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(15, 59, 74, 0.1);
+            box-shadow: 0 0 0 3px rgba(10,52,66,0.1);
         }
         select.form-control {
-            appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%234a6577" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>');
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235f7e91' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 20px center;
+            background-position: right 18px center;
+            background-size: 14px;
+            padding-right: 45px;
         }
         .row-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: 14px;
         }
 
-        /* total */
+        /* ===== TOTAL CARD ===== */
         .total-card {
-            background: var(--neutral-200);
+            background: linear-gradient(145deg, var(--primary-light), white);
             border-radius: 26px;
-            padding: 28px;
-            margin: 30px 0 24px;
-            border: 1px solid var(--neutral-300);
+            padding: 24px;
+            margin: 28px 0 20px;
+            border: 1px solid rgba(10,52,66,0.1);
         }
         .total-row {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             padding: 12px 0;
-            border-bottom: 1px dashed var(--neutral-400);
+            border-bottom: 1px solid rgba(10,52,66,0.1);
         }
-        .total-row:last-child { border-bottom: none; }
+        .total-row:last-of-type {
+            border-bottom: none;
+        }
         .total-label {
             font-weight: 500;
             color: var(--neutral-700);
             display: flex;
             align-items: center;
             gap: 6px;
+            font-size: 14px;
         }
         .total-value {
             font-weight: 700;
-            color: var(--primary);
+            font-size: 18px;
+            color: var(--primary-dark);
+            font-family: 'Cormorant Garamond', serif;
         }
         .total-highlight {
             background: white;
-            border-radius: 22px;
-            padding: 22px;
-            margin-top: 24px;
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
             text-align: center;
-            border: 1px solid var(--neutral-300);
+            border: 1px solid rgba(10,52,66,0.05);
         }
         .total-highlight .total-label {
             justify-content: center;
             font-size: 14px;
         }
         .total-highlight .total-value {
-            font-size: 38px;
-            font-weight: 700;
+            font-size: 36px;
             color: var(--primary);
+            line-height: 1.2;
         }
         .info-badge {
             background: var(--accent-light);
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--accent);
-            margin-left: 10px;
+            margin-left: 8px;
+            white-space: nowrap;
         }
 
-        /* late charge & jaminan */
+        /* ===== LATE CHARGE & JAMINAN ===== */
         .late-charge-card, .jaminan-card {
             background: white;
             border-radius: 26px;
-            padding: 28px;
+            padding: 26px;
             margin: 28px 0;
-            border: 1px solid var(--neutral-300);
+            border: 1px solid var(--neutral-400);
             box-shadow: var(--shadow-sm);
         }
         .jaminan-title, .late-charge-title {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 20px;
-            font-weight: 600;
+            gap: 10px;
+            font-weight: 700;
             color: var(--primary);
-            margin-bottom: 22px;
+            margin-bottom: 20px;
+            font-size: 18px;
         }
-        .jaminan-title i, .late-charge-title i { color: var(--accent); }
+        .jaminan-title i, .late-charge-title i {
+            color: var(--accent);
+            font-size: 22px;
+        }
         .jaminan-list li {
             display: flex;
+            align-items: center;
             gap: 14px;
             margin-bottom: 18px;
             color: var(--neutral-700);
+            font-size: 14px;
+            border-bottom: 1px dashed var(--neutral-400);
+            padding-bottom: 12px;
         }
-        .jaminan-list li i { color: var(--accent); width: 22px; }
+        .jaminan-list li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .jaminan-list li i {
+            color: var(--accent);
+            width: 20px;
+            font-size: 16px;
+        }
         .jaminan-diskusi {
-            background: var(--primary-soft);
-            padding: 18px 20px;
+            background: var(--accent-light);
+            padding: 18px;
             border-radius: 18px;
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-top: 24px;
+            margin-top: 20px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .jaminan-diskusi i {
+            color: var(--accent);
+            font-size: 20px;
         }
         .late-charge-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
-            font-size: 15px;
+            margin-bottom: 14px;
+            font-size: 14px;
         }
         .late-charge-value {
-            background: var(--primary-soft);
-            padding: 6px 18px;
-            border-radius: 30px;
+            background: var(--primary-light);
+            padding: 6px 16px;
+            border-radius: 40px;
             font-weight: 600;
             color: var(--primary);
+            font-size: 13px;
         }
         .late-example {
             background: var(--neutral-200);
-            padding: 18px;
-            border-radius: 16px;
-            margin-top: 20px;
-            font-size: 14px;
+            border-radius: 18px;
+            padding: 16px;
+            margin-top: 18px;
+            font-size: 13px;
+            border-left: 4px solid var(--accent);
         }
 
-        /* button */
+        /* ===== BUTTON ===== */
         .btn {
             width: 100%;
             padding: 20px;
             border: none;
-            border-radius: 50px;
+            border-radius: 60px;
             font-size: 17px;
             font-weight: 600;
             display: flex;
@@ -448,70 +588,32 @@
             justify-content: center;
             gap: 12px;
             cursor: pointer;
-            background: var(--primary);
+            background: linear-gradient(145deg, var(--primary), var(--primary-dark));
             color: white;
-            transition: 0.2s;
-            box-shadow: 0 12px 28px rgba(15, 59, 74, 0.3);
+            box-shadow: 0 12px 28px rgba(10,52,66,0.3);
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
         }
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: scale(1.02);
-            box-shadow: 0 18px 32px rgba(15, 59, 74, 0.35);
+        .btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 6px 16px rgba(10,52,66,0.4);
         }
-        .btn i { font-size: 22px; }
+        .btn i {
+            font-size: 20px;
+        }
         .disclaimer {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--neutral-500);
             text-align: center;
             margin-top: 22px;
         }
 
-        /* footer */
-        .footer {
-            background: var(--neutral-900);
-            color: white;
-            padding: 50px 0 36px;
-            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-            margin-top: 50px;
-        }
-        .footer h4 {
-            font-size: 26px;
-            font-weight: 600;
-            margin-bottom: 18px;
-        }
-        .footer p {
-            color: var(--neutral-500);
-            font-size: 14px;
-            margin-bottom: 28px;
-            line-height: 1.7;
-        }
-        .footer-contact, .jam-operasional {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            background: rgba(255,255,255,0.03);
-            padding: 16px 18px;
-            border-radius: 60px;
-            margin-bottom: 16px;
-            color: var(--neutral-300);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .footer-contact i, .jam-operasional i { color: var(--accent); width: 24px; }
-        .copyright {
-            text-align: center;
-            color: var(--neutral-600);
-            font-size: 12px;
-            margin-top: 48px;
-            padding-top: 28px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-
-        /* floating wa */
+        /* ===== FLOATING WA PREMIUM ===== */
         .wa-float {
             position: fixed;
-            bottom: 28px;
-            right: 28px;
-            background: #25D366;
+            bottom: 24px;
+            right: 24px;
+            background: linear-gradient(145deg, #25D366, #128C7E);
             width: 64px;
             height: 64px;
             border-radius: 32px;
@@ -519,143 +621,242 @@
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 32px;
-            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3);
+            font-size: 30px;
+            box-shadow: 0 12px 28px rgba(37,211,102,0.3);
             z-index: 100;
-            border: 2px solid white;
-            transition: 0.2s;
+            border: 3px solid white;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
-        .wa-float:hover { transform: scale(1.1); background: #20b859; }
+        .wa-float:active {
+            transform: scale(0.9);
+            box-shadow: 0 8px 20px rgba(37,211,102,0.5);
+        }
 
-        /* mobile */
-        @media (max-width: 480px) {
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--neutral-900);
+            color: white;
+            padding: 48px 0 32px;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            margin-top: 48px;
+        }
+        .footer h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            margin-bottom: 16px;
+            color: white;
+        }
+        .footer p {
+            color: var(--neutral-500);
+            font-size: 13px;
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+        .footer-contact, .jam-operasional {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+            color: var(--neutral-400);
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50px;
+            font-size: 14px;
+        }
+        .footer-contact i, .jam-operasional i {
+            color: var(--accent);
+            width: 22px;
+            font-size: 16px;
+        }
+        .copyright {
+            text-align: center;
+            color: var(--neutral-600);
+            font-size: 12px;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* ===== RESPONSIVE FIXES KHUSUS MOBILE ===== */
+        @media (max-width: 380px) {
+            .container { padding: 0 16px; }
+            .logo-icon { width: 48px; height: 48px; font-size: 28px; }
+            .logo-text h1 { font-size: 28px; }
+            .hero-quote { font-size: 20px; }
+            .trust-badge { padding: 8px 14px; font-size: 12px; }
             .values-grid { gap: 12px; }
-            .value-card { padding: 20px 10px; }
-            .trust-seal { flex-wrap: wrap; gap: 8px; }
-            .row-2 { grid-template-columns: 1fr; }
-            .card, .form-card { padding: 28px 20px; }
+            .value-card { padding: 20px 12px; }
+            .form-card { padding: 28px 18px; }
+            .total-highlight .total-value { font-size: 32px; }
+        }
+
+        /* Fix untuk notch / rounded corners di iOS */
+        @supports (padding: max(0px)) {
+            .header, .footer {
+                padding-left: max(20px, env(safe-area-inset-left));
+                padding-right: max(20px, env(safe-area-inset-right));
+            }
+            .wa-float {
+                bottom: max(24px, env(safe-area-inset-bottom));
+                right: max(24px, env(safe-area-inset-right));
+            }
+        }
+
+        /* Hilangkan blue highlight di mobile */
+        input, select, button, a, .value-card, .trust-badge {
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
         }
     </style>
 </head>
 <body>
 
-    <!-- loading -->
+    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-logo">YF</div>
+        <div class="loading-content">
+            <div class="loading-logo">YF</div>
+            <div class="loading-text">Youth Fund</div>
+        </div>
     </div>
 
-    <!-- floating WA -->
-    <a href="https://wa.me/628895885691" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <!-- Floating WhatsApp (dengan event sendiri, bukan href langsung) -->
+    <div class="wa-float" id="waFloatBtn">
+        <i class="fab fa-whatsapp"></i>
+    </div>
 
-    <!-- header -->
+    <!-- Header -->
     <header class="header">
         <div class="container">
             <div class="logo">
                 <div class="logo-icon">YF</div>
                 <div class="logo-text">
-                    <h1>YouthFund</h1>
+                    <h1>Youth Fund</h1>
                     <div class="tagline">MITRA KEUANGAN TERPERCAYA</div>
                 </div>
             </div>
             <div class="hero-quote">
-                <i class="fas fa-quote-left" style="margin-right: 8px; opacity: 0.7;"></i>Solusi keuangan transparan, tanpa biaya tersembunyi.
+                <i class="fas fa-quote-left"></i> Memberikan solusi keuangan dengan prinsip transparansi dan saling menguntungkan.
             </div>
             <div class="trust-badges">
-                <span class="trust-badge"><i class="fas fa-check-circle"></i> 3 tahun melayani</span>
-                <span class="trust-badge"><i class="fas fa-shield-alt"></i> 100% amanah</span>
-                <span class="trust-badge"><i class="fas fa-bolt"></i> fast response</span>
+                <span class="trust-badge"><i class="fas fa-check-circle"></i> 3 Tahun Melayani</span>
+                <span class="trust-badge"><i class="fas fa-shield-alt"></i> 100% Amanah</span>
+                <span class="trust-badge"><i class="fas fa-bolt"></i> Fast Respon</span>
             </div>
         </div>
     </header>
 
     <main class="container">
-        <!-- story -->
-        <div class="card" data-aos="fade-up">
-            <h2 class="story-title">Komitmen kami</h2>
-            <p class="story-text">Setiap pengajuan pinjaman adalah awal dari hubungan saling percaya. Kami hadir dengan proses yang jelas, jaminan yang aman, dan komunikasi yang hangat.</p>
+        <!-- Story Card -->
+        <section class="story-card">
+            <h2 class="story-title">Komitmen Kami</h2>
+            <p class="story-text">Setiap orang memiliki perjalanan finansialnya masing-masing. Ada yang membutuhkan tambahan modal untuk mengembangkan usaha, ada yang memerlukan dana cepat untuk kebutuhan mendesak.</p>
+            <p class="story-text">Youth Fund hadir sebagai mitra yang memahami bahwa setiap pinjaman adalah amanah. Kami berkomitmen untuk memberikan solusi dengan proses yang jelas, transparan, dan mengutamakan kepentingan bersama.</p>
             <div class="story-highlight">
-                <p>“Pinjaman jelas, jaminan aman, hubungan saling menguntungkan.”</p>
+                <p>"Prinsip kami sederhana: pinjaman yang jelas, jaminan yang aman, dan hubungan yang saling menguntungkan."</p>
             </div>
+        </section>
+
+        <!-- Trust Seal -->
+        <div class="trust-seal">
+            <span class="seal-item"><i class="fas fa-file-contract"></i> Proses Transparan</span>
+            <span class="seal-item"><i class="fas fa-handshake"></i> Negosiasi Jaminan</span>
+            <span class="seal-item"><i class="fas fa-clock"></i> Cair Hari Ini</span>
         </div>
 
-        <!-- trust seal -->
-        <div class="trust-seal" data-aos="fade-up">
-            <div class="seal-item"><i class="fas fa-file-contract"></i> Proses transparan</div>
-            <div class="seal-item"><i class="fas fa-handshake"></i> Jaminan negosiasi</div>
-            <div class="seal-item"><i class="fas fa-clock"></i> Cair hari ini</div>
-        </div>
-
-        <!-- values -->
+        <!-- Value Cards -->
         <div class="values-grid">
-            <div class="value-card" data-aos="flip-left"><div class="value-icon"><i class="fas fa-hand-holding-heart"></i></div><h3>Manusiawi</h3><p>Empati dalam setiap proses</p></div>
-            <div class="value-card" data-aos="flip-left"><div class="value-icon"><i class="fas fa-balance-scale"></i></div><h3>Transparan</h3><p>Tanpa biaya tersembunyi</p></div>
-            <div class="value-card" data-aos="flip-left"><div class="value-icon"><i class="fas fa-bolt"></i></div><h3>Cepat</h3><p>Cair di hari yang sama</p></div>
-            <div class="value-card" data-aos="flip-left"><div class="value-icon"><i class="fas fa-shield-alt"></i></div><h3>Amanah</h3><p>Jaminan dikembalikan 100%</p></div>
+            <div class="value-card"><div class="value-icon"><i class="fas fa-hand-holding-heart"></i></div><h3>Manusiawi</h3><p>Kami mendengarkan dan memahami kebutuhan Anda</p></div>
+            <div class="value-card"><div class="value-icon"><i class="fas fa-balance-scale"></i></div><h3>Transparan</h3><p>Tidak ada biaya tersembunyi</p></div>
+            <div class="value-card"><div class="value-icon"><i class="fas fa-bolt"></i></div><h3>Cepat</h3><p>Pencairan di hari yang sama</p></div>
+            <div class="value-card"><div class="value-icon"><i class="fas fa-shield-alt"></i></div><h3>Amanah</h3><p>Jaminan dikembalikan 100%</p></div>
         </div>
 
-        <!-- form card -->
-        <div class="form-card" data-aos="fade-up">
-            <h3 class="form-title">Ajukan pinjaman</h3>
-            <p class="form-description">Isi data berikut, kami akan segera menghubungi via WhatsApp.</p>
+        <!-- Form Card -->
+        <div class="form-card">
+            <h3 class="form-title">Ajukan Pinjaman</h3>
+            <p class="form-description">Isi form berikut, tim kami akan segera menghubungi Anda via WhatsApp.</p>
+
             <form id="loanForm">
-                <div class="form-group"><label><i class="fas fa-user"></i> Nama lengkap</label><input type="text" class="form-control" id="nama" required></div>
-                <div class="row-2">
-                    <div class="form-group"><label><i class="fas fa-phone-alt"></i> WhatsApp</label><input type="tel" class="form-control" id="wa" required></div>
-                    <div class="form-group"><label><i class="fas fa-calendar-alt"></i> Usia</label><input type="number" class="form-control" id="usia" required></div>
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Nama Lengkap</label>
+                    <input type="text" class="form-control" id="nama" placeholder="Contoh: Ahmad Fauzi" required>
                 </div>
-                <div class="form-group"><label><i class="fas fa-map-marker-alt"></i> Domisili</label><input type="text" class="form-control" id="domisili" required></div>
                 <div class="row-2">
-                    <div class="form-group"><label><i class="fas fa-money-bill-wave"></i> Jumlah pinjaman</label>
+                    <div class="form-group">
+                        <label><i class="fas fa-phone-alt"></i> No. WhatsApp</label>
+                        <input type="tel" class="form-control" id="wa" placeholder="081234567890" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> Usia</label>
+                        <input type="number" class="form-control" id="usia" placeholder="25" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Domisili</label>
+                    <input type="text" class="form-control" id="domisili" placeholder="Kota/Kabupaten" required>
+                </div>
+                <div class="row-2">
+                    <div class="form-group">
+                        <label><i class="fas fa-money-bill-wave"></i> Jumlah Pinjaman</label>
                         <select class="form-control" id="jumlah" required onchange="updateTotal()">
                             <option value="" disabled selected>Pilih nominal</option>
                             <option value="200000">Rp 200.000</option>
                             <option value="300000">Rp 300.000</option>
                             <option value="400000">Rp 400.000</option>
                             <option value="500000">Rp 500.000</option>
-                            <option value="600000" selected>Rp 600.000</option>
+                            <option value="600000">Rp 600.000</option>
                             <option value="700000">Rp 700.000</option>
                             <option value="800000">Rp 800.000</option>
                             <option value="900000">Rp 900.000</option>
                             <option value="1000000">Rp 1.000.000</option>
                         </select>
                     </div>
-                    <div class="form-group"><label><i class="fas fa-clock"></i> Tenor</label>
-                        <select class="form-control" id="tenor" required><option value="30 hari" selected>30 Hari</option></select>
+                    <div class="form-group">
+                        <label><i class="fas fa-clock"></i> Tenor</label>
+                        <select class="form-control" id="tenor" required>
+                            <option value="30 Hari" selected>30 Hari</option>
+                        </select>
                     </div>
                 </div>
-                <div class="form-group"><label><i class="fas fa-gem"></i> Jenis jaminan</label>
+                <div class="form-group">
+                    <label><i class="fas fa-gem"></i> Jenis Jaminan</label>
                     <select class="form-control" id="jaminan" required>
                         <option value="" disabled selected>Pilih jenis jaminan</option>
                         <option value="BPKB Motor">BPKB Motor</option>
                         <option value="BPKB Mobil">BPKB Mobil</option>
                         <option value="Sertifikat Tanah/Rumah">Sertifikat Tanah/Rumah</option>
                         <option value="SK Kerja">SK Kerja</option>
-                        <option value="Elektronik">Elektronik (laptop/HP/TV)</option>
+                        <option value="Elektronik">Elektronik (Laptop/HP/TV)</option>
                     </select>
                 </div>
-                <div class="form-group"><label><i class="fas fa-briefcase"></i> Tujuan pinjaman</label><input type="text" class="form-control" id="tujuan" required></div>
-                <div class="form-group"><label><i class="fas fa-comment"></i> Catatan (opsional)</label><input type="text" class="form-control" id="catatan"></div>
+                <div class="form-group">
+                    <label><i class="fas fa-briefcase"></i> Tujuan Pinjaman</label>
+                    <input type="text" class="form-control" id="tujuan" placeholder="Contoh: Modal Usaha" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-comment"></i> Catatan (opsional)</label>
+                    <input type="text" class="form-control" id="catatan" placeholder="Informasi tambahan">
+                </div>
 
-                <!-- total -->
+                <!-- Total Card -->
                 <div class="total-card">
-                    <div class="total-row"><span class="total-label"><i class="fas fa-coins"></i> Pinjaman pokok</span><span class="total-value" id="pokokDisplay">Rp 600.000</span></div>
-                    <div class="total-row"><span class="total-label"><i class="fas fa-handshake"></i> Kontribusi mitra <span class="info-badge">10rb/100rb</span></span><span class="total-value" id="tambahanDisplay">Rp 60.000</span></div>
-                    <div class="total-highlight">
-                        <div class="total-label">Total pengembalian (30 hari)</div>
-                        <div class="total-value" id="totalDisplay">Rp 660.000</div>
-                    </div>
+                    <div class="total-row"><span class="total-label"><i class="fas fa-coins"></i> Pinjaman Pokok</span><span class="total-value" id="pokokDisplay">Rp 0</span></div>
+                    <div class="total-row"><span class="total-label"><i class="fas fa-handshake"></i> Kontribusi Mitra <span class="info-badge">10rb/100rb</span></span><span class="total-value" id="tambahanDisplay">Rp 0</span></div>
+                    <div class="total-highlight"><div class="total-label">Total Pengembalian (30 Hari)</div><div class="total-value" id="totalDisplay">Rp 0</div></div>
                 </div>
 
-                <!-- late charge -->
+                <!-- Late Charge -->
                 <div class="late-charge-card">
-                    <div class="late-charge-title"><i class="fas fa-clock"></i> Ketentuan keterlambatan</div>
+                    <div class="late-charge-title"><i class="fas fa-clock"></i> Ketentuan Keterlambatan</div>
                     <div class="late-charge-item"><span class="late-charge-label">Tambahan per bulan</span><span class="late-charge-value">10rb/100rb</span></div>
-                    <div class="late-example"><i class="fas fa-calculator"></i> Contoh: pinjam Rp500.000 (total Rp550.000), telat 1 bln jadi Rp600.000, telat 2 bln Rp650.000.</div>
+                    <div class="late-example"><i class="fas fa-calculator"></i> Pinjaman Rp500.000 jatuh tempo Rp550.000. Telat 1 bln Rp600.000, telat 2 bln Rp650.000.</div>
                 </div>
 
-                <!-- sistem jaminan -->
+                <!-- Jaminan -->
                 <div class="jaminan-card">
-                    <div class="jaminan-title"><i class="fas fa-shield-alt"></i> Sistem jaminan</div>
+                    <div class="jaminan-title"><i class="fas fa-shield-alt"></i> Sistem Jaminan</div>
                     <ul class="jaminan-list">
                         <li><i class="fas fa-check-circle"></i> Jaminan disimpan selama 30 hari</li>
                         <li><i class="fas fa-check-circle"></i> Dikembalikan 100% saat pelunasan</li>
@@ -664,40 +865,67 @@
                     <div class="jaminan-diskusi"><i class="fas fa-handshake"></i> Jaminan dapat didiskusikan</div>
                 </div>
 
-                <button type="button" class="btn" id="submitBtn"><i class="fab fa-whatsapp"></i> Kirim pengajuan via WhatsApp</button>
-                <p class="disclaimer">Dengan mengirim, Anda menyetujui syarat & ketentuan YouthFund.</p>
+                <button type="button" class="btn" id="submitBtn"><i class="fab fa-whatsapp"></i> Kirim Pengajuan via WhatsApp</button>
+                <p class="disclaimer">Dengan mengirim, Anda menyetujui syarat & ketentuan Youth Fund.</p>
             </form>
         </div>
     </main>
 
-    <!-- footer -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <h4>YouthFund</h4>
-            <p>Mitra keuangan terpercaya yang mengutamakan transparansi, keamanan, dan kenyamanan.</p>
+            <h4>Youth Fund</h4>
+            <p>Mitra keuangan terpercaya yang mengutamakan transparansi, keamanan, dan kenyamanan dalam setiap proses pinjaman.</p>
             <div class="footer-contact"><i class="fab fa-whatsapp"></i> +62 895-8858-5691</div>
             <div class="jam-operasional"><i class="far fa-clock"></i> Senin - Sabtu, 07.00 - 17.00 WIB</div>
-            <div class="copyright">© 2025 YouthFund. All rights reserved.</div>
+            <div class="copyright">© 2025 Youth Fund. All rights reserved.</div>
         </div>
     </footer>
 
-    <!-- AOS & scripts -->
+    <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ duration: 600, once: true, offset: 30 });
+        // Init AOS (dipercepat untuk mobile)
+        AOS.init({ duration: 500, once: true, offset: 20, disable: window.innerWidth < 640 ? true : false });
+
+        // Loading overlay
         window.addEventListener('load', function() {
-            setTimeout(() => document.getElementById('loadingOverlay').classList.add('hidden'), 1600);
-            updateTotal(); // set initial total from selected 600k
+            setTimeout(function() {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            }, 1500); // lebih cepat biar tidak lama
         });
 
+        // Update total function
         function updateTotal() {
-            const jumlah = parseInt(document.getElementById('jumlah').value) || 0;
-            const tambahan = (jumlah / 100000) * 10000;
-            document.getElementById('pokokDisplay').innerText = `Rp ${jumlah.toLocaleString('id-ID')}`;
-            document.getElementById('tambahanDisplay').innerText = `Rp ${tambahan.toLocaleString('id-ID')}`;
-            document.getElementById('totalDisplay').innerText = `Rp ${(jumlah + tambahan).toLocaleString('id-ID')}`;
+            const jumlah = document.getElementById('jumlah').value;
+            const pokokEl = document.getElementById('pokokDisplay');
+            const tambahanEl = document.getElementById('tambahanDisplay');
+            const totalEl = document.getElementById('totalDisplay');
+
+            if (!jumlah) {
+                pokokEl.textContent = 'Rp 0';
+                tambahanEl.textContent = 'Rp 0';
+                totalEl.textContent = 'Rp 0';
+                return;
+            }
+
+            const jumlahNum = parseInt(jumlah);
+            const tambahan = (jumlahNum / 100000) * 10000;
+            const total = jumlahNum + tambahan;
+
+            pokokEl.textContent = `Rp ${jumlahNum.toLocaleString('id-ID')}`;
+            tambahanEl.textContent = `Rp ${tambahan.toLocaleString('id-ID')}`;
+            totalEl.textContent = `Rp ${total.toLocaleString('id-ID')}`;
         }
 
+        // Floating WA dengan teks otomatis (sesuai permintaan)
+        document.getElementById('waFloatBtn').addEventListener('click', function() {
+            const pesan = `Halo kak, izin bertanya. Saya tertarik untuk mengajukan pinjaman dana tunai di Youth Fund. Mohon informasinya lebih lanjut ya, kak. Terima kasih.`;
+            const nomorTujuan = '628895885691'; // tanpa +
+            window.open(`https://wa.me/${nomorTujuan}?text=${encodeURIComponent(pesan)}`, '_blank');
+        });
+
+        // Submit form ke WA
         document.getElementById('submitBtn').addEventListener('click', function() {
             const nama = document.getElementById('nama').value.trim();
             const wa = document.getElementById('wa').value.trim();
@@ -710,39 +938,47 @@
             const catatan = document.getElementById('catatan').value.trim();
 
             if (!nama || !wa || !usia || !domisili || !jumlah || !jaminan || !tujuan) {
-                alert('Harap lengkapi semua field wajib');
+                alert('Mohon lengkapi semua field yang wajib diisi');
                 return;
             }
 
+            // Format nomor WA
             let waFormat = wa.replace(/\D/g, '');
             if (waFormat.startsWith('0')) waFormat = '62' + waFormat.slice(1);
-
+            
             const jumlahNum = parseInt(jumlah);
             const tambahan = (jumlahNum / 100000) * 10000;
             const total = jumlahNum + tambahan;
             const charge = (jumlahNum / 100000) * 10000;
 
-            const pesan = `*YOUTHFUND - PENGAJUAN PINJAMAN*
+            const pesan = `*YOUTH FUND - PENGAJUAN PINJAMAN*
+
+DATA PEMOHON:
 • Nama: ${nama}
-• WA: ${wa}
+• WhatsApp: ${wa}
 • Usia: ${usia}
 • Domisili: ${domisili}
-• Pinjaman: Rp ${jumlahNum.toLocaleString('id-ID')}
+
+DETAIL PINJAMAN:
+• Jumlah: Rp ${jumlahNum.toLocaleString('id-ID')}
 • Tenor: ${tenor}
 • Jaminan: ${jaminan}
 • Tujuan: ${tujuan}
 • Catatan: ${catatan || '-'}
 
-Rincian:
-Pinjaman Pokok: Rp ${jumlahNum.toLocaleString('id-ID')}
-Kontribusi Mitra: Rp ${tambahan.toLocaleString('id-ID')}
-Total Pengembalian: Rp ${total.toLocaleString('id-ID')}
-Denda per bulan: Rp ${charge.toLocaleString('id-ID')}
+RINCIAN:
+• Pinjaman Pokok: Rp ${jumlahNum.toLocaleString('id-ID')}
+• Kontribusi Mitra: Rp ${tambahan.toLocaleString('id-ID')}
+• Total Pengembalian: Rp ${total.toLocaleString('id-ID')}
+• Denda/bulan: Rp ${charge.toLocaleString('id-ID')}
 
 Saya setuju untuk diskusi lebih lanjut.`;
 
             window.open(`https://wa.me/628895885691?text=${encodeURIComponent(pesan)}`, '_blank');
         });
+
+        // Trigger update total jika ada nilai default
+        window.addEventListener('load', updateTotal);
     </script>
 </body>
 </html>
